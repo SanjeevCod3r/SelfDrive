@@ -1,0 +1,442 @@
+'use client'
+import { useState, useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  Users, Fuel, Settings2, Calendar, 
+  CheckCircle2, Star, ShieldCheck, Zap,
+  ChevronLeft, Tag, CreditCard, Clock, Info, Crown, ArrowRight, Award,
+  MapPin, Heart, Share2, Gauge, MoveRight, ChevronRight
+} from 'lucide-react'
+import { useAuth } from '@/components/AuthProvider'
+import Link from 'next/link'
+import { toast } from 'sonner'
+
+const fmtINR = (n) => `₹${(n || 0).toLocaleString('en-IN')}`
+
+export default function SelfDriveDetail() {
+  const { id } = useParams()
+  const { api, user, openAuth } = useAuth()
+  const router = useRouter()
+  
+  const [car, setCar] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [coupon, setCoupon] = useState('')
+  const [appliedCoupon, setAppliedCoupon] = useState(null)
+  const [discount, setDiscount] = useState(0)
+  const [validating, setValidating] = useState(false)
+  const [paying, setPaying] = useState(false)
+
+  const [driverLicense, setDriverLicense] = useState('')
+  const [ageVerified, setAgeVerified] = useState(false)
+  const [usePoints, setUsePoints] = useState(false)
+  const [deliveryAddress, setDeliveryAddress] = useState('')
+
+  useEffect(() => {
+    if (window.google) {
+      initMap()
+    }
+  }, [loading])
+
+  useEffect(() => {
+    api(`/cars/${id}`).then(data => {
+      setCar(data.car)
+      setLoading(false)
+    }).catch(() => {
+      toast.error('Car not found')
+      router.push('/self-drive')
+    })
+  }, [id, api, router])
+
+  const days = startDate && endDate ? Math.max(1, Math.ceil((new Date(endDate) - new Date(startDate)) / 86400000)) : 0
+  const baseAmount = car ? days * car.pricePerDay : 0
+  const pointsDiscount = usePoints ? Math.min(user?.points || 0, baseAmount - discount) : 0
+  const premiumDiscount = user?.isPremium ? Math.floor((baseAmount - discount - pointsDiscount) * 0.05) : 0
+  const finalAmount = Math.max(0, baseAmount - discount - premiumDiscount - pointsDiscount)
+
+  const initMap = () => {
+    if (!window.google) return
+    const input = document.getElementById('delivery-address-input')
+    if (input) {
+      const autocomplete = new window.google.maps.places.Autocomplete(input, {
+        componentRestrictions: { country: "in" }
+      })
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace()
+        setDeliveryAddress(place.formatted_address || place.name)
+      })
+    }
+  }
+
+  const useCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords
+        const geocoder = new window.google.maps.Geocoder()
+        geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            setDeliveryAddress(results[0].formatted_address)
+          }
+        })
+      })
+    }
+  }
+
+  const applyCoupon = async () => {
+    if (!coupon) return
+    setValidating(true)
+    try {
+      const data = await api('/coupons/validate', { 
+        method: 'POST', 
+        body: JSON.stringify({ code: coupon, amount: baseAmount }) 
+      })
+      setDiscount(data.discount)
+      setAppliedCoupon(data.code)
+      toast.success(`Coupon applied!`)
+    } catch (e) {
+      toast.error(e.message)
+      setDiscount(0)
+      setAppliedCoupon(null)
+    } finally { setValidating(false) }
+  }
+
+  const handleBook = async () => {
+    if (!user) { openAuth('login'); return }
+    if (!startDate || !endDate) { toast.error('Select dates'); return }
+    if (!driverLicense || !ageVerified) { toast.error('Verification required'); return }
+    if (!deliveryAddress) { toast.error('Delivery address required'); return }
+
+    setPaying(true)
+    try {
+      const order = await api('/bookings/create-order', {
+        method: 'POST',
+        body: JSON.stringify({ 
+          carId: car.id, startDate, endDate, couponCode: appliedCoupon, 
+          bookingType: 'self-drive', driverLicense, ageVerified, usePoints,
+          deliveryAddress
+        }),
+      })
+
+      const options = {
+        key: order.key,
+        amount: order.amount * 100,
+        currency: 'INR',
+        name: 'Kasika Self Drive',
+        description: `Booking: ${car.name}`,
+        order_id: order.orderId,
+        prefill: { name: user.name, email: user.email, contact: user.phone || '' },
+        theme: { color: '#f59e0b' },
+        handler: async (response) => {
+          try {
+            await api('/bookings/verify', {
+              method: 'POST',
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                bookingId: order.bookingId,
+              }),
+            })
+            toast.success(`Booking confirmed!`)
+            router.push('/dashboard')
+          } catch (e) { toast.error('Verification failed') }
+        },
+        modal: { ondismiss: () => setPaying(false) }
+      }
+      new window.Razorpay(options).open()
+    } catch (e) {
+      toast.error(e.message)
+      setPaying(false)
+    }
+  }
+
+  if (loading) return <div className="min-h-screen bg-[#0d0f1c] flex items-center justify-center"><div className="size-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" /></div>
+  if (!car) return null
+
+  const today = new Date().toISOString().split('T')[0]
+
+  return (
+    <div className="min-h-screen bg-[#0d0f1c] text-white">
+      
+      {/* ── CINEMATIC BANNER ── */}
+      <section className="relative h-[550px] md:h-[650px] flex items-center bg-[#0d0f1c] overflow-hidden">
+        {/* Ambient Showroom Lighting */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-l from-amber-500/10 to-transparent" />
+          <div className="absolute bottom-0 left-0 w-full h-2/3 bg-gradient-to-t from-[#0d0f1c] to-transparent" />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+
+        {/* Cinematic Background Car Image */}
+        <motion.img 
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.3 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop" 
+          alt="Luxury Performance" 
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              {/* Breadcrumbs */}
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="h-px w-12 bg-amber-500" />
+                <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.5em]">Premium Selection</span>
+              </div>
+
+              <h1 className="text-5xl md:text-[90px] font-black uppercase tracking-tighter leading-[0.85] mb-8">
+                {car.brand} <br />
+                <span className="text-amber-500">{car.name}</span>
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-8">
+                <div className="flex items-center gap-4">
+                  <div className="size-12 rounded-full border border-white/10 flex items-center justify-center">
+                    <Zap className="size-5 text-amber-500" />
+                  </div>
+                  <div>
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Standard Daily Rate</p>
+                    <p className="text-xl font-black text-white uppercase tracking-tight">{fmtINR(car.pricePerDay)}</p>
+                  </div>
+                </div>
+
+                <div className="h-10 w-px bg-white/10 hidden md:block" />
+
+                <div className="flex items-center gap-4">
+                  <div className="size-12 rounded-full border border-white/10 flex items-center justify-center">
+                    <ShieldCheck className="size-5 text-amber-500" />
+                  </div>
+                  <div>
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Insurance Policy</p>
+                    <p className="text-xl font-black text-white uppercase tracking-tight">Fully Protected</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MAIN CONTENT ── */}
+      <main className="container mx-auto px-6 relative z-20 pb-20 pt-16">
+        <div className="grid lg:grid-cols-12 gap-16">
+          
+          {/* LEFT: IMAGE & SPECS */}
+          <div className="lg:col-span-7 space-y-12">
+            
+            {/* Cinematic Image Presentation */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              whileHover={{ y: -5 }}
+              className="relative aspect-video bg-gradient-to-br from-slate-900 to-black border border-white/10 rounded-[48px] overflow-hidden flex items-center justify-center group shadow-2xl"
+            >
+              {/* Mesh Gradient Background Effect */}
+              <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-700">
+                <div className="absolute top-1/4 left-1/4 size-64 bg-amber-500/20 blur-[120px] rounded-full animate-pulse" />
+                <div className="absolute bottom-1/4 right-1/4 size-64 bg-blue-500/10 blur-[120px] rounded-full" />
+              </div>
+
+              {/* Showroom Floor Effect */}
+              <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black to-transparent opacity-60" />
+
+              <motion.img 
+                src={car.image} 
+                alt={car.name} 
+                className="w-[85%] h-auto object-contain relative z-10 drop-shadow-[0_50px_60px_rgba(0,0,0,0.8)]"
+                whileHover={{ scale: 1.05, rotateY: 5, rotateX: -5 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              />
+
+              {/* Floating Quality Badge */}
+              <div className="absolute bottom-8 left-8 bg-black/60 backdrop-blur-xl border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-3 z-20">
+                <ShieldCheck className="size-5 text-amber-500" />
+                <div>
+                   <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Quality Status</p>
+                   <p className="text-[10px] font-black text-white uppercase tracking-widest leading-none">Pristine Condition</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* User Wallet Info */}
+            <div className="bg-amber-500/5 border border-amber-500/10 p-8 rounded-[40px] flex items-center justify-between group">
+               <div className="flex items-center gap-6">
+                  <div className="size-16 rounded-2xl bg-amber-500 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
+                     <Award className="size-8" />
+                  </div>
+                  <div>
+                     <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1">Your Rewards Balance</p>
+                     <h4 className="text-3xl font-black text-white tracking-tighter uppercase">{fmtINR(user?.points || 0)}</h4>
+                  </div>
+               </div>
+               <div className="text-right hidden md:block">
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Membership</p>
+                  <p className="text-xs font-black text-white uppercase tracking-widest">
+                    {user?.isPremium ? 'Elite Club Member' : 'Standard Member'}
+                  </p>
+               </div>
+            </div>
+
+            {/* Specs Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { icon: Users, label: 'Capacity', value: `${car.seats} Person` },
+                { icon: Fuel, label: 'Fuel', value: car.fuel },
+                { icon: Settings2, label: 'Trans', value: car.transmission },
+                { icon: Gauge, label: 'Performance', value: 'High' }
+              ].map((s, i) => (
+                <div key={i} className="bg-slate-900/50 border border-white/5 p-6 rounded-3xl text-center">
+                  <s.icon className="size-5 text-amber-500 mx-auto mb-4" />
+                  <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">{s.label}</div>
+                  <div className="text-xs font-black uppercase tracking-tight text-white">{s.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Features */}
+            <div className="space-y-6 pt-6 border-t border-white/5">
+              <h3 className="text-[10px] font-black text-amber-500 uppercase tracking-[0.4em]">Vehicle Highlights</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {(car.features || ['Premium Audio', 'GPS', 'Bluetooth', 'Reverse Camera']).map((f, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <CheckCircle2 className="size-4 text-amber-500" />
+                    <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">{f}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: RESERVATION */}
+          <div className="lg:col-span-5">
+            <div className="sticky top-28 bg-[#0a0c16] border border-white/5 rounded-[48px] p-10 shadow-2xl overflow-hidden">
+              
+              <div className="flex items-center justify-between mb-10">
+                <h3 className="text-sm font-black uppercase tracking-[0.4em] text-amber-500">Reservation</h3>
+                <Heart className="size-5 text-slate-600 hover:text-red-500 cursor-pointer transition-colors" />
+              </div>
+
+              <div className="space-y-8">
+                {/* Dates */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Pickup Date</label>
+                    <input 
+                      type="date" min={today} value={startDate} onChange={e => setStartDate(e.target.value)}
+                      className="w-full h-14 bg-black border border-white/5 rounded-2xl px-5 text-xs font-black focus:outline-none focus:border-amber-500 transition-all [color-scheme:dark]"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Return Date</label>
+                    <input 
+                      type="date" min={startDate || today} value={endDate} onChange={e => setEndDate(e.target.value)}
+                      className="w-full h-14 bg-black border border-white/5 rounded-2xl px-5 text-xs font-black focus:outline-none focus:border-amber-500 transition-all [color-scheme:dark]"
+                    />
+                  </div>
+                </div>
+
+                {/* Delivery Address */}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center ml-1">
+                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Delivery Address</label>
+                    <button 
+                      onClick={useCurrentLocation}
+                      className="text-[8px] font-black text-amber-500 uppercase tracking-widest hover:text-white transition-colors flex items-center gap-1"
+                    >
+                      <MapPin className="size-2" /> Use Current Location
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <MapPin className="size-4 absolute left-5 top-1/2 -translate-y-1/2 text-amber-500" />
+                    <input 
+                      id="delivery-address-input"
+                      value={deliveryAddress} onChange={e => setDeliveryAddress(e.target.value)}
+                      placeholder="Street, Area, City..."
+                      className="w-full h-14 bg-black border border-white/5 rounded-2xl pl-12 pr-6 text-xs font-black focus:outline-none focus:border-amber-500 transition-all placeholder:text-slate-800"
+                    />
+                  </div>
+                </div>
+
+                {/* License */}
+                <div className="space-y-3">
+                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Driver's License</label>
+                  <input 
+                    value={driverLicense} onChange={e => setDriverLicense(e.target.value)}
+                    placeholder="DL Number Required"
+                    className="w-full h-14 bg-black border border-white/5 rounded-2xl px-6 text-xs font-black focus:outline-none focus:border-amber-500 transition-all placeholder:text-slate-800"
+                  />
+                </div>
+
+                <label className="flex items-center gap-4 cursor-pointer group">
+                  <input 
+                    type="checkbox" checked={ageVerified} onChange={e => setAgeVerified(e.target.checked)}
+                    className="size-5 rounded-lg border-2 border-white/10 bg-transparent text-amber-500 focus:ring-amber-500 accent-amber-500"
+                  />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-white transition-colors">I verify I am 21+ years of age</span>
+                </label>
+
+                {/* Summary */}
+                <AnimatePresence>
+                  {days > 0 && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                      className="pt-8 border-t border-white/5 space-y-4"
+                    >
+                      <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        <span>Base Amount</span>
+                        <span className="text-white">{fmtINR(baseAmount)}</span>
+                      </div>
+                      
+                      {user?.isPremium && (
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-amber-500">
+                           <div className="flex items-center gap-1.5">
+                              <Crown className="size-3 fill-amber-500" /> Premium Member Savings (5%)
+                           </div>
+                           <span>-{fmtINR(premiumDiscount)}</span>
+                        </div>
+                      )}
+
+                      {usePoints && pointsDiscount > 0 && (
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-green-500">
+                           <span>Reward Points Discount</span>
+                           <span>-{fmtINR(pointsDiscount)}</span>
+                        </div>
+                      )}
+
+                      <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-500 pt-4 border-t border-white/5">
+                        <span>Grand Total ({days} Days)</span>
+                        <span className="text-4xl font-black text-amber-500 tracking-tighter leading-none">{fmtINR(finalAmount)}</span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <button 
+                  onClick={handleBook} disabled={paying}
+                  className="w-full h-20 bg-amber-500 hover:bg-amber-600 text-black font-black rounded-3xl transition-all text-[12px] uppercase tracking-[0.4em] flex items-center justify-center gap-4 active:scale-95 shadow-xl shadow-amber-500/10"
+                >
+                  {paying ? 'Processing...' : (
+                    <>
+                      {days > 0 ? `Confirm Booking` : 'Reserve Now'}
+                      <MoveRight className="size-4" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  )
+}
