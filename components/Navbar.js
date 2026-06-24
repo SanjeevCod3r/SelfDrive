@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Menu, X, User, LogOut, Settings, LayoutDashboard,
-  PhoneCall, Award
+  PhoneCall, Award, ChevronRight, Crown
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/components/AuthProvider'
@@ -41,6 +41,7 @@ export default function Navbar() {
   ]
 
   return (
+    <>
     <header className={`fixed top-0 inset-x-0 z-[100] transition-all duration-300 ${
       isScrolled ? 'bg-white/90 backdrop-blur-xl shadow-xl py-3' : 'bg-white shadow-md py-4'
     }`}>
@@ -95,7 +96,7 @@ export default function Navbar() {
               {user ? (
                 <div className="relative group">
                   <button className="flex items-center gap-3">
-                    <div className="size-10 rounded-2xl bg-slate-900 flex items-center justify-center text-white hover:bg-amber-500 transition-all">
+                    <div className="size-10 rounded-2xl bg-charcoal-900 flex items-center justify-center text-white hover:bg-amber-500 transition-all">
                       <User className="size-4" />
                     </div>
                   </button>
@@ -120,7 +121,7 @@ export default function Navbar() {
               ) : (
                 <Button 
                   onClick={() => openAuth('login')} 
-                  className="bg-amber-500 text-white hover:bg-slate-900 font-black uppercase tracking-[0.2em] text-[10px] h-12 px-8 rounded-2xl transition-all shadow-xl shadow-amber-500/10"
+                  className="bg-amber-500 text-white hover:bg-charcoal-900 font-black uppercase tracking-[0.2em] text-[10px] h-12 px-8 rounded-2xl transition-all shadow-xl shadow-amber-500/10"
                 >
                   Join Kasika
                 </Button>
@@ -130,55 +131,138 @@ export default function Navbar() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="lg:hidden p-3 rounded-xl bg-slate-100 text-slate-900 transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Open menu"
+            className="lg:hidden flex size-11 items-center justify-center rounded-xl bg-charcoal-900 text-white transition-colors active:scale-95"
+            onClick={() => setMobileMenuOpen(true)}
           >
-            {mobileMenuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+            <Menu className="size-5" />
           </button>
         </div>
       </div>
+    </header>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
+    {/* ── Mobile Drawer (outside header so its fixed positioning isn't
+        trapped by the header's backdrop-blur containing block) ── */}
+    <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="lg:hidden absolute left-0 right-0 top-full bg-white border-t border-slate-100 shadow-2xl p-8 flex flex-col gap-6 max-h-[85vh] overflow-y-auto"
-          >
-            <nav className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`text-2xl font-black uppercase tracking-tighter ${pathname === link.href ? 'text-amber-500' : 'text-slate-400 hover:text-slate-900'}`}
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </nav>
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="lg:hidden fixed inset-0 z-[110] bg-charcoal-950/60 backdrop-blur-sm"
+            />
 
-            <div className="pt-8 border-t border-slate-50 flex flex-col gap-6">
-               <div className="flex items-center gap-4">
-                 <div className="size-12 rounded-2xl bg-amber-500 flex items-center justify-center text-white">
-                   <PhoneCall className="size-6" />
-                 </div>
-                 <div>
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Direct Support</p>
-                   <p className="text-xl font-black text-slate-900">+91 98765 43210</p>
-                 </div>
-               </div>
-               {!user && (
-                 <Button onClick={() => { openAuth('login'); setMobileMenuOpen(false) }} className="bg-slate-900 text-white h-16 rounded-2xl font-black uppercase tracking-widest text-xs">
-                   Get Started
-                 </Button>
-               )}
-            </div>
-          </motion.div>
+            {/* Panel */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="lg:hidden fixed inset-y-0 right-0 z-[120] flex w-[86%] max-w-sm flex-col bg-white shadow-2xl"
+            >
+              {/* Drawer header */}
+              <div className="flex items-center justify-between border-b border-zinc-100 px-6 py-5">
+                <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+                  <img src="/assests/kashika logo.png" alt="Kasika" className="h-9 w-auto object-contain" />
+                  <span className="text-xl font-black tracking-tighter text-charcoal-900">Kasika<span className="text-amber-500">.</span></span>
+                </Link>
+                <button
+                  aria-label="Close menu"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex size-10 items-center justify-center rounded-xl bg-zinc-100 text-charcoal-900 transition-colors hover:bg-zinc-200 active:scale-95"
+                >
+                  <X className="size-5" />
+                </button>
+              </div>
+
+              {/* User strip */}
+              {user && (
+                <div className="mx-6 mt-6 flex items-center gap-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 p-4">
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-amber-500 text-white shrink-0">
+                    <User className="size-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-black uppercase tracking-tight text-charcoal-900">{user.name || 'Member'}</p>
+                    <p className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-amber-600">
+                      <Award className="size-3" /> {user.points || 0} Points
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Nav links */}
+              <nav className="flex-1 overflow-y-auto px-6 py-6">
+                <div className="flex flex-col gap-1">
+                  {navLinks.map((link) => {
+                    const isActive = pathname === link.href
+                    return (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center justify-between rounded-2xl px-4 py-4 text-sm font-black uppercase tracking-widest transition-all ${
+                          isActive
+                            ? 'bg-charcoal-900 text-white'
+                            : 'text-slate-600 hover:bg-zinc-50 hover:text-charcoal-900'
+                        }`}
+                      >
+                        {link.name}
+                        <ChevronRight className={`size-4 ${isActive ? 'text-amber-500' : 'text-zinc-300'}`} />
+                      </Link>
+                    )
+                  })}
+
+                  {user && (
+                    <>
+                      <div className="my-3 h-px bg-zinc-100" />
+                      <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 rounded-2xl px-4 py-4 text-sm font-black uppercase tracking-widest text-slate-600 transition-all hover:bg-zinc-50 hover:text-charcoal-900">
+                        <LayoutDashboard className="size-4 text-amber-500" /> Dashboard
+                      </Link>
+                      {user.role === 'admin' && (
+                        <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 rounded-2xl px-4 py-4 text-sm font-black uppercase tracking-widest text-slate-600 transition-all hover:bg-zinc-50 hover:text-charcoal-900">
+                          <Settings className="size-4 text-amber-500" /> Admin Panel
+                        </Link>
+                      )}
+                    </>
+                  )}
+                </div>
+              </nav>
+
+              {/* Footer: contact + auth */}
+              <div className="border-t border-zinc-100 p-6 space-y-5">
+                <a href="tel:+919129933309" className="flex items-center gap-4">
+                  <div className="flex size-11 items-center justify-center rounded-2xl bg-amber-500 text-white shrink-0">
+                    <PhoneCall className="size-5" />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Direct Support</p>
+                    <p className="text-base font-black tracking-tight text-charcoal-900">+91 91299 33309</p>
+                  </div>
+                </a>
+
+                {user ? (
+                  <button
+                    onClick={() => { logout(); setMobileMenuOpen(false) }}
+                    className="flex w-full items-center justify-center gap-3 rounded-2xl bg-red-50 py-4 text-xs font-black uppercase tracking-widest text-red-500 transition-all hover:bg-red-100 active:scale-95"
+                  >
+                    <LogOut className="size-4" /> Sign Out
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => { openAuth('login'); setMobileMenuOpen(false) }}
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-amber-500 py-4 text-xs font-black uppercase tracking-widest text-white transition-all hover:bg-charcoal-900 active:scale-95"
+                  >
+                    <Crown className="size-4" /> Join Kasika
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
-    </header>
+    </>
   )
 }

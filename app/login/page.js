@@ -32,7 +32,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex">
 
       {/* ── LEFT PANEL — amber with car ── */}
-      <div className="hidden lg:flex lg:w-[45%] bg-amber-500 relative overflow-hidden flex-col justify-between p-12">
+      <div className="hidden lg:flex lg:w-[45%] bg-brand-500 relative overflow-hidden flex-col justify-between p-12">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2" />
@@ -61,7 +61,7 @@ export default function LoginPage() {
           <h2 className="text-4xl font-black text-white uppercase tracking-tight leading-tight mb-4">
             Drive Your<br />Dream Car
           </h2>
-          <p className="text-amber-100 text-base font-medium max-w-xs">
+          <p className="text-brand-100 text-base font-medium max-w-xs">
             Premium self-drive & chauffeured car rentals across India.
           </p>
 
@@ -77,7 +77,7 @@ export default function LoginPage() {
         </div>
 
         {/* Bottom tagline */}
-        <div className="relative z-10 text-amber-100 text-xs font-bold uppercase tracking-widest">
+        <div className="relative z-10 text-brand-100 text-xs font-bold uppercase tracking-widest">
           Your Journey, Your Way
         </div>
       </div>
@@ -103,8 +103,8 @@ export default function LoginPage() {
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Welcome back 👋</h1>
-            <p className="text-slate-500 text-sm font-medium mt-1">
+            <h1 className="text-3xl font-black text-charcoal-900 tracking-tight">Welcome back 👋</h1>
+            <p className="text-zinc-500 text-sm font-medium mt-1">
               Sign in to your Kashika account
             </p>
           </div>
@@ -114,18 +114,18 @@ export default function LoginPage() {
 
             {/* Email */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
                 <input
                   name="email"
                   type="email"
                   required
                   autoComplete="email"
                   placeholder="you@example.com"
-                  className="w-full h-13 py-3.5 pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-slate-400"
+                  className="w-full h-13 py-3.5 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-zinc-400"
                 />
               </div>
             </div>
@@ -133,27 +133,27 @@ export default function LoginPage() {
             {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-widest">
+                <label className="text-xs font-bold text-charcoal-900 uppercase tracking-widest">
                   Password
                 </label>
-                <button type="button" className="text-xs font-semibold text-amber-600 hover:text-amber-700">
+                <button type="button" className="text-xs font-semibold text-brand-600 hover:text-brand-700">
                   Forgot password?
                 </button>
               </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
                 <input
                   name="password"
                   type={showPwd ? 'text' : 'password'}
                   required
                   autoComplete="current-password"
                   placeholder="Enter your password"
-                  className="w-full h-13 py-3.5 pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-slate-400"
+                  className="w-full h-13 py-3.5 pl-11 pr-12 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-zinc-400"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPwd(!showPwd)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 transition-colors"
                 >
                   {showPwd ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                 </button>
@@ -171,7 +171,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-white font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+              className="w-full py-3.5 bg-brand-500 hover:bg-brand-600 active:scale-[0.98] text-white font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm"
             >
               {loading ? (
                 <span className="size-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -183,27 +183,27 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">or</span>
-            <div className="flex-1 h-px bg-slate-200" />
+            <div className="flex-1 h-px bg-zinc-200" />
+            <span className="text-zinc-400 text-xs font-bold uppercase tracking-widest">or</span>
+            <div className="flex-1 h-px bg-zinc-200" />
           </div>
 
           {/* Switch to signup */}
-          <p className="text-center text-sm text-slate-500 font-medium">
+          <p className="text-center text-sm text-zinc-500 font-medium">
             Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-amber-600 font-black hover:underline underline-offset-4">
+            <Link href="/signup" className="text-brand-600 font-black hover:underline underline-offset-4">
               Create one free
             </Link>
           </p>
 
           {/* Trust */}
-          <div className="flex items-center justify-center gap-5 mt-8 pt-6 border-t border-slate-100">
-            <div className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
-              <Shield className="size-3.5 text-amber-500" /> Secure & Encrypted
+          <div className="flex items-center justify-center gap-5 mt-8 pt-6 border-t border-zinc-200">
+            <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-medium">
+              <Shield className="size-3.5 text-brand-500" /> Secure & Encrypted
             </div>
-            <span className="w-px h-4 bg-slate-200" />
-            <div className="text-slate-400 text-xs font-medium">
-              <span className="text-amber-500 mr-1">✓</span>No spam, ever
+            <span className="w-px h-4 bg-zinc-200" />
+            <div className="text-zinc-500 text-xs font-medium">
+              <span className="text-brand-500 mr-1">✓</span>No spam, ever
             </div>
           </div>
         </motion.div>

@@ -25,7 +25,7 @@ const reviews = [
 
 export default function Testimonials() {
   return (
-    <section className="py-32 bg-[#020617] overflow-hidden">
+    <section className="py-32 bg-zinc-50 overflow-hidden">
       <div className="container mx-auto px-6">
         
         {/* Header */}
@@ -35,16 +35,16 @@ export default function Testimonials() {
                <div className="w-10 h-px bg-amber-500" />
                <span>Our Testimonial</span>
             </div>
-            <h2 className="text-3xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none">
+            <h2 className="text-3xl md:text-8xl font-black text-charcoal-900 uppercase tracking-tighter leading-none">
               What Peoples Say <br /> <span className="text-amber-500">About Kasika</span>
             </h2>
           </div>
           
           <div className="flex items-center gap-4">
-             <button className="size-16 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:bg-amber-500 hover:border-amber-500 hover:text-white transition-all shadow-lg">
+             <button className="size-16 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:bg-amber-500 hover:border-amber-500 hover:text-white transition-all shadow-lg">
                 <ArrowRight className="size-7 rotate-180" />
              </button>
-             <button className="size-16 rounded-full bg-amber-500 flex items-center justify-center text-slate-950 hover:bg-white transition-all shadow-xl shadow-amber-500/20">
+             <button className="size-16 rounded-full bg-amber-500 flex items-center justify-center text-white hover:bg-charcoal-900 transition-all shadow-xl shadow-amber-500/20">
                 <ArrowRight className="size-7" />
              </button>
           </div>
@@ -59,11 +59,11 @@ export default function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="relative group bg-slate-900/50 border border-white/5 rounded-[50px] p-12 pt-20 shadow-2xl hover:border-amber-500/20 transition-all duration-500"
+              className="relative group bg-white border border-zinc-200 rounded-[50px] p-12 pt-20 shadow-[0_10px_40px_-15px_rgba(21,22,27,0.12)] hover:border-amber-500/30 transition-all duration-500"
             >
               {/* Massive Floating Quote Icon */}
-              <div className="absolute top-6 right-6 lg:-right-6 lg:-top-6 size-16 bg-amber-500 rounded-full flex items-center justify-center text-slate-950 shadow-xl shadow-amber-500/30 border-8 border-[#020617] group-hover:scale-110 transition-transform duration-500">
-                 <Quote className="size-7 fill-slate-950 stroke-[3]" />
+              <div className="absolute top-6 right-6 lg:-right-6 lg:-top-6 size-16 bg-amber-500 rounded-full flex items-center justify-center text-white shadow-xl shadow-amber-500/30 border-8 border-zinc-50 group-hover:scale-110 transition-transform duration-500">
+                 <Quote className="size-7 fill-white stroke-[3]" />
               </div>
 
               {/* Author Header */}
@@ -72,18 +72,18 @@ export default function Testimonials() {
                     <img src={review.image} alt={review.name} className="w-full h-full object-cover" />
                  </div>
                  <div>
-                    <h4 className="text-xl font-black uppercase tracking-tight text-white mb-1">{review.name}</h4>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{review.role}</p>
+                    <h4 className="text-xl font-black uppercase tracking-tight text-charcoal-900 mb-1">{review.name}</h4>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">{review.role}</p>
                  </div>
               </div>
 
               {/* Text */}
-              <p className="text-slate-400 font-medium leading-relaxed mb-10 text-lg italic">
+              <p className="text-zinc-600 font-medium leading-relaxed mb-10 text-lg italic">
                 "{review.text}"
               </p>
 
               {/* Gold Stars */}
-              <div className="flex items-center gap-1.5 pt-6 border-t border-white/5">
+              <div className="flex items-center gap-1.5 pt-6 border-t border-zinc-200">
                  {[1,2,3,4,5].map(star => (
                    <Star key={star} className="size-4 text-amber-500 fill-amber-500" />
                  ))}

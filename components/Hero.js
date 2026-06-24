@@ -113,8 +113,20 @@ export default function Hero() {
   return (
     <>
       <section className="relative overflow-hidden bg-white min-h-[88vh] flex items-center">
-        {/* Amber diagonal — right half */}
-        <div className="absolute top-0 right-0 w-[50%] h-full bg-amber-500 clip-diagonal hidden lg:block z-0" />
+        {/* Amber diagonal — right half (animated reveal) */}
+        <motion.div
+          initial={{ x: '60%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.9, ease: 'easeOut' }}
+          className="absolute top-0 right-0 w-[50%] h-full bg-amber-500 clip-diagonal hidden lg:block z-0"
+        />
+
+        {/* Soft floating glow accents */}
+        <motion.div
+          animate={{ y: [0, -30, 0], opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          className="pointer-events-none absolute top-20 right-[15%] hidden size-72 rounded-full bg-amber-300/30 blur-[100px] lg:block"
+        />
 
         <div className="container mx-auto px-4 lg:px-10 relative z-10 pt-24 pb-16">
           <div className="grid lg:grid-cols-2 gap-0 items-center min-h-[70vh]">
@@ -126,15 +138,39 @@ export default function Hero() {
               transition={{ duration: 0.7, ease: 'easeOut' }}
               className="relative z-10 flex flex-col justify-center"
             >
-              <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black text-slate-900 leading-[1.0] mb-5 uppercase tracking-tight">
-                Unlock Your <br />
-                <span className="text-amber-500">Adventure,</span> Drive <br />
-                Your Dreams
-              </h1>
+              <motion.h1
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+                }}
+                className="text-[2rem] sm:text-5xl md:text-6xl lg:text-[72px] font-black text-slate-900 leading-[1.05] mb-5 uppercase tracking-tight"
+              >
+                {['Unlock Your', 'line2', 'Your Dreams'].map((line, idx) => (
+                  <motion.span
+                    key={idx}
+                    variants={{
+                      hidden: { opacity: 0, y: 24 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+                    }}
+                    className="block"
+                  >
+                    {line === 'line2'
+                      ? <><span className="text-amber-500">Adventure,</span> Drive</>
+                      : line}
+                  </motion.span>
+                ))}
+              </motion.h1>
 
-              <p className="text-slate-500 text-base font-medium leading-relaxed mb-10 max-w-[440px]">
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55, duration: 0.6 }}
+                className="text-slate-500 text-base font-medium leading-relaxed mb-10 max-w-[440px]"
+              >
                 Premium self-drive & chauffeured rentals across India. Your journey, your rules.
-              </p>
+              </motion.p>
 
               {/* ── Search Card (Original Light Theme) ── */}
               <motion.div
@@ -144,7 +180,7 @@ export default function Hero() {
                 className="bg-white rounded-[20px] shadow-[0_8px_40px_rgba(0,0,0,0.12)] border border-slate-100 overflow-visible max-w-[620px]"
               >
                 {/* Row 1 — Location | Pick Up | Car Type */}
-                <div className="grid grid-cols-3 divide-x divide-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                   {/* Location */}
                   <div className="px-5 py-4">
                     <label className="block text-[11px] font-black text-slate-800 uppercase tracking-wider mb-1.5">
@@ -211,31 +247,31 @@ export default function Hero() {
                 <div className="h-px bg-slate-100 mx-5" />
 
                 {/* Row 2 — Date range + Search button */}
-                <div className="flex items-center px-5 py-4 gap-4">
-                  <div className="flex-1">
+                <div className="flex flex-col sm:flex-row sm:items-center px-5 py-4 gap-4">
+                  <div className="flex-1 min-w-0">
                     <label className="block text-[11px] font-black text-slate-800 uppercase tracking-wider mb-1.5">
                       Date
                     </label>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2 flex-1">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
                         <Calendar className="size-4 text-amber-500 flex-shrink-0" />
                         <input
                           type="date"
                           min={today}
                           value={startDate}
                           onChange={e => setStartDate(e.target.value)}
-                          className="text-sm text-slate-600 bg-transparent border-none outline-none font-medium w-full"
+                          className="text-sm text-slate-600 bg-transparent border-none outline-none font-medium w-full min-w-0"
                         />
                       </div>
                       <span className="text-slate-300 font-light select-none">—</span>
-                      <div className="flex items-center gap-2 flex-1">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
                         <Calendar className="size-4 text-amber-500 flex-shrink-0" />
                         <input
                           type="date"
                           min={startDate || today}
                           value={endDate}
                           onChange={e => setEndDate(e.target.value)}
-                          className="text-sm text-slate-600 bg-transparent border-none outline-none font-medium w-full"
+                          className="text-sm text-slate-600 bg-transparent border-none outline-none font-medium w-full min-w-0"
                         />
                       </div>
                     </div>
@@ -243,9 +279,10 @@ export default function Hero() {
 
                   <button
                     onClick={handleSearch}
-                    className="flex-shrink-0 h-12 w-12 rounded-xl bg-amber-500 hover:bg-amber-600 flex items-center justify-center transition-all shadow-lg shadow-amber-500/30 hover:scale-105"
+                    className="flex-shrink-0 h-12 w-full sm:w-12 rounded-xl bg-amber-500 hover:bg-amber-600 flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-500/30 hover:scale-105"
                   >
                     <Search className="size-5 text-white" />
+                    <span className="sm:hidden text-white font-black uppercase tracking-widest text-xs">Search</span>
                   </button>
                 </div>
               </motion.div>
@@ -254,8 +291,12 @@ export default function Hero() {
             {/* ── RIGHT: Auto-sliding car image ── */}
             <div className="hidden lg:flex items-center justify-center relative select-none">
 
-              {/* Slide container — fixed size, only image transitions */}
-              <div className="relative w-full max-w-[580px] aspect-square">
+              {/* Slide container — gentle continuous float */}
+              <motion.div
+                animate={{ y: [0, -16, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative w-full max-w-[580px] aspect-square"
+              >
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={current}
@@ -275,8 +316,26 @@ export default function Hero() {
                   </motion.div>
                 </AnimatePresence>
 
-                {/* Floating car name tag — bottom left */}
+                {/* Soft shadow that anchors the floating car */}
+                <motion.div
+                  animate={{ scaleX: [1, 0.88, 1], opacity: [0.25, 0.15, 0.25] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute bottom-4 left-1/2 h-4 w-2/3 -translate-x-1/2 rounded-[100%] bg-charcoal-900/25 blur-xl"
+                />
+              </motion.div>
 
+              {/* Slide indicators */}
+              <div className="absolute bottom-2 right-6 z-20 flex gap-2">
+                {SLIDES.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrent(i)}
+                    aria-label={`Go to slide ${i + 1}`}
+                    className={`h-2.5 rounded-full transition-all duration-300 ${
+                      i === current ? 'w-7 bg-amber-500' : 'w-2.5 bg-amber-300/60 hover:bg-amber-400'
+                    }`}
+                  />
+                ))}
               </div>
 
               {/* Dot indicators */}

@@ -110,10 +110,10 @@ function AdminLoginPage({ onLogin, onSignup }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center px-4 relative overflow-hidden">
       {/* Background Orbs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo Section */}
@@ -122,28 +122,28 @@ function AdminLoginPage({ onLogin, onSignup }) {
             <img
               src="/assests/kashika logo.png"
               alt="Kasika Logo"
-              className="h-24 w-auto object-contain mx-auto mb-6 drop-shadow-2xl"
+              className="h-24 w-auto object-contain mx-auto mb-6"
             />
           </Link>
-          <h1 className="text-2xl font-black text-white uppercase tracking-widest mb-1">
-            Admin <span className="text-amber-500">Portal</span>
+          <h1 className="text-2xl font-black text-charcoal-900 uppercase tracking-widest mb-1">
+            Admin <span className="text-brand-500">Portal</span>
           </h1>
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Secure Access Required</p>
+          <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Secure Access Required</p>
         </div>
 
         {/* Card */}
-        <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-[40px] p-10 shadow-2xl">
+        <div className="bg-white border border-zinc-200 rounded-[40px] p-10 shadow-[0_20px_60px_-20px_rgba(21,22,27,0.25)]">
           <div className="mb-8">
-            <h2 className="text-xl font-black text-white uppercase tracking-tight">
+            <h2 className="text-xl font-black text-charcoal-900 uppercase tracking-tight">
               {isLogin ? 'Sign In' : 'Create Admin'}
             </h2>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mt-1">
+            <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider mt-1">
               {isLogin ? 'Enter your credentials to manage the fleet' : 'Register a new administrative account'}
             </p>
           </div>
 
           {error && (
-            <div className={`text-sm font-bold px-4 py-3 rounded-2xl mb-6 ${error.includes('created') ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+            <div className={`text-sm font-bold px-4 py-3 rounded-2xl mb-6 ${error.includes('created') ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-600'}`}>
               {error}
             </div>
           )}
@@ -151,35 +151,35 @@ function AdminLoginPage({ onLogin, onSignup }) {
           <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Full Name</label>
+                <label className="text-[10px] font-black text-charcoal-900 uppercase tracking-widest ml-1">Full Name</label>
                 <input
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
                   required
                   placeholder="e.g. Administrator"
-                  className="w-full bg-slate-950 border border-slate-800 text-white placeholder-slate-700 rounded-2xl px-5 py-4 text-sm font-medium focus:outline-none focus:border-amber-500 transition-all"
+                  className="w-full bg-white border border-zinc-200 text-charcoal-900 placeholder:text-zinc-400 rounded-2xl px-5 py-4 text-sm font-medium focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all"
                 />
               </div>
             )}
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
+              <label className="text-[10px] font-black text-charcoal-900 uppercase tracking-widest ml-1">Email Address</label>
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
                 placeholder="admin@kasika.com"
-                className="w-full bg-slate-950 border border-slate-800 text-white placeholder-slate-700 rounded-2xl px-5 py-4 text-sm font-medium focus:outline-none focus:border-amber-500 transition-all"
+                className="w-full bg-white border border-zinc-200 text-charcoal-900 placeholder:text-zinc-400 rounded-2xl px-5 py-4 text-sm font-medium focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all"
               />
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between ml-1">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Secret Key</label>
+                <label className="text-[10px] font-black text-charcoal-900 uppercase tracking-widest">Secret Key</label>
                 {isLogin && (
-                  <button type="button" className="text-[10px] font-bold text-amber-500 uppercase tracking-widest hover:underline">Forgot?</button>
+                  <button type="button" className="text-[10px] font-bold text-brand-600 uppercase tracking-widest hover:underline">Forgot?</button>
                 )}
               </div>
               <div className="relative">
@@ -189,12 +189,12 @@ function AdminLoginPage({ onLogin, onSignup }) {
                   onChange={e => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full bg-slate-950 border border-slate-800 text-white placeholder-slate-700 rounded-2xl px-5 py-4 text-sm font-medium focus:outline-none focus:border-amber-500 transition-all pr-14"
+                  className="w-full bg-white border border-zinc-200 text-charcoal-900 placeholder:text-zinc-400 rounded-2xl px-5 py-4 text-sm font-medium focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all pr-14"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-600 hover:text-white transition-colors"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-charcoal-900 transition-colors"
                 >
                   {showPass ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                 </button>
@@ -204,10 +204,10 @@ function AdminLoginPage({ onLogin, onSignup }) {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-white hover:bg-amber-500 text-slate-950 font-black uppercase tracking-widest text-xs py-5 rounded-2xl transition-all flex items-center justify-center gap-2 mt-4 shadow-xl shadow-white/5 active:scale-95"
+              className="w-full bg-brand-500 hover:bg-brand-600 text-white font-black uppercase tracking-widest text-xs py-5 rounded-2xl transition-all flex items-center justify-center gap-2 mt-4 shadow-xl shadow-brand-500/25 active:scale-95"
             >
               {submitting ? (
-                <span className="size-4 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin" />
+                <span className="size-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
               ) : (
                 <>{isLogin ? 'Continue Session' : 'Create Admin'} <ChevronRight className="size-4" /></>
               )}
@@ -217,7 +217,7 @@ function AdminLoginPage({ onLogin, onSignup }) {
           <div className="mt-8 text-center">
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] hover:text-amber-500 transition-colors"
+              className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.2em] hover:text-brand-600 transition-colors"
             >
               {isLogin ? 'Request New Access' : 'Return to Login'}
             </button>
@@ -225,15 +225,15 @@ function AdminLoginPage({ onLogin, onSignup }) {
         </div>
 
         <div className="mt-12 text-center flex flex-col items-center gap-6">
-          <div className="flex items-center gap-8 text-slate-600">
+          <div className="flex items-center gap-8 text-zinc-500">
             <div className="flex items-center gap-2">
-              <Shield className="size-3 text-amber-500" />
+              <Shield className="size-3 text-brand-500" />
               <span className="text-[10px] font-bold uppercase tracking-widest">Secure TLS</span>
             </div>
-            <div className="size-1 bg-slate-800 rounded-full" />
+            <div className="size-1 bg-zinc-300 rounded-full" />
             <div className="text-[10px] font-bold uppercase tracking-widest">Admin v2.0</div>
           </div>
-          <Link href="/" className="text-slate-700 hover:text-slate-400 transition-all text-[10px] font-black uppercase tracking-[0.3em]">
+          <Link href="/" className="text-zinc-400 hover:text-charcoal-900 transition-all text-[10px] font-black uppercase tracking-[0.3em]">
             ← Return to Dashboard
           </Link>
         </div>
@@ -263,10 +263,10 @@ export default function AdminLayout({ children }) {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="size-12 border-4 border-slate-800 border-t-amber-500 rounded-full animate-spin" />
-          <p className="text-slate-400 text-sm font-medium uppercase tracking-widest">Loading...</p>
+          <div className="size-12 border-4 border-zinc-200 border-t-brand-500 rounded-full animate-spin" />
+          <p className="text-zinc-500 text-sm font-medium uppercase tracking-widest">Loading...</p>
         </div>
       </div>
     )
@@ -279,23 +279,23 @@ export default function AdminLayout({ children }) {
 
   // Logged in — show admin dashboard
   return (
-    <div className="bg-slate-950 min-h-screen flex">
+    <div className="bg-zinc-50 min-h-screen flex">
       {/* Sidebar */}
-      <div className="w-64 fixed left-0 top-0 bottom-0 bg-slate-900 border-r border-slate-800 flex flex-col z-20">
-        <div className="p-6 border-b border-slate-800">
+      <div className="w-64 fixed left-0 top-0 bottom-0 bg-charcoal-900 border-r border-charcoal-800 flex flex-col z-20">
+        <div className="p-6 border-b border-charcoal-800">
           <div className="flex items-center gap-3">
-            <div className="size-9 bg-amber-500 rounded-xl flex items-center justify-center">
-              <Shield className="size-5 text-slate-950" />
+            <div className="size-9 bg-brand-500 rounded-xl flex items-center justify-center">
+              <Shield className="size-5 text-white" />
             </div>
             <div>
               <div className="text-white font-black text-sm uppercase tracking-tight">Kasika Admin</div>
-              <div className="text-slate-500 text-[10px] font-medium">{admin.email}</div>
+              <div className="text-zinc-500 text-[10px] font-medium">{admin.email}</div>
             </div>
           </div>
         </div>
 
         <div className="p-4 flex-1 overflow-y-auto">
-          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 px-2">Main Menu</div>
+          <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3 px-2">Main Menu</div>
           <nav className="space-y-1">
             {links.map((link) => {
               const active = pathname === link.href
@@ -305,8 +305,8 @@ export default function AdminLayout({ children }) {
                   href={link.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold uppercase tracking-widest text-xs transition-all ${
                     active
-                      ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20'
-                      : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                      ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/25'
+                      : 'text-zinc-400 hover:bg-charcoal-800 hover:text-white'
                   }`}
                 >
                   <link.icon className="size-4 shrink-0" />
@@ -318,11 +318,11 @@ export default function AdminLayout({ children }) {
         </div>
 
         {/* Bottom actions */}
-        <div className="p-4 border-t border-slate-800 space-y-2">
+        <div className="p-4 border-t border-charcoal-800 space-y-2">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all text-xs font-bold uppercase tracking-widest"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-charcoal-800 hover:text-white transition-all text-xs font-bold uppercase tracking-widest"
           >
             <Car className="size-4" /> View Website
           </Link>
@@ -338,21 +338,21 @@ export default function AdminLayout({ children }) {
       {/* Main Content */}
       <div className="flex-1 ml-64 flex flex-col min-h-screen">
         {/* Topbar */}
-        <header className="h-16 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
-          <div className="text-white font-black uppercase tracking-widest text-xs text-slate-400">
+        <header className="h-16 bg-white/90 backdrop-blur-xl border-b border-zinc-200 flex items-center justify-between px-8 sticky top-0 z-10">
+          <div className="text-charcoal-900 font-black uppercase tracking-widest text-xs">
             {links.find(l => l.href === pathname)?.label || 'Dashboard'}
           </div>
-          <div className="flex items-center gap-3 bg-slate-800 py-2 px-4 rounded-full">
-            <div className="size-6 bg-amber-500 rounded-full flex items-center justify-center text-slate-950 font-black text-xs">
+          <div className="flex items-center gap-3 bg-zinc-100 py-2 px-4 rounded-full">
+            <div className="size-6 bg-brand-500 rounded-full flex items-center justify-center text-white font-black text-xs">
               {admin.name?.charAt(0)?.toUpperCase() || 'A'}
             </div>
-            <span className="text-xs font-bold text-white uppercase tracking-widest">{admin.name}</span>
+            <span className="text-xs font-bold text-charcoal-900 uppercase tracking-widest">{admin.name}</span>
           </div>
         </header>
 
         {/* Page Content */}
         <div className="p-8 flex-1">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 min-h-full shadow-2xl">
+          <div className="bg-white border border-zinc-200 rounded-3xl p-8 min-h-full shadow-[0_10px_40px_-15px_rgba(21,22,27,0.12)]">
             {children}
           </div>
         </div>

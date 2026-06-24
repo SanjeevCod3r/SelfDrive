@@ -18,6 +18,49 @@ module.exports = {
     	},
     	extend: {
     		colors: {
+    			// ── Kashi Ka Self Drive brand palette (sampled from logo) ──
+    			// `amber` is intentionally overridden so every existing
+    			// amber-* utility across the site/admin picks up the logo orange.
+    			amber: {
+    				50: '#FFF6ED',
+    				100: '#FFEAD5',
+    				200: '#FFD0AA',
+    				300: '#FFB174',
+    				400: '#FB8B3C',
+    				500: '#F26A21',
+    				600: '#E8601A',
+    				700: '#C24A12',
+    				800: '#9A3C14',
+    				900: '#7C3314',
+    				950: '#431808'
+    			},
+    			brand: {
+    				50: '#FFF6ED',
+    				100: '#FFEAD5',
+    				200: '#FFD0AA',
+    				300: '#FFB174',
+    				400: '#FB8B3C',
+    				500: '#F26A21',
+    				600: '#E8601A',
+    				700: '#C24A12',
+    				800: '#9A3C14',
+    				900: '#7C3314',
+    				950: '#431808'
+    			},
+    			charcoal: {
+    				DEFAULT: '#15161B',
+    				50: '#F5F5F6',
+    				100: '#E7E7EA',
+    				200: '#C8C9CF',
+    				300: '#9A9CA6',
+    				400: '#6B6D79',
+    				500: '#4A4C56',
+    				600: '#33343C',
+    				700: '#24252B',
+    				800: '#1A1B20',
+    				900: '#15161B',
+    				950: '#0D0E12'
+    			},
     			border: 'hsl(var(--border))',
     			input: 'hsl(var(--input))',
     			ring: 'hsl(var(--ring))',

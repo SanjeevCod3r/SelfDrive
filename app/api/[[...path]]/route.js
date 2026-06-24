@@ -94,156 +94,23 @@ async function ensureSeed() {
       createdAt: new Date(),
     })
   }
-  // Seed cars
-  const carCount = await db.collection('cars').countDocuments()
-  if (carCount === 0) {
-    const cars = [
-      {
-        id: uuidv4(),
-        name: 'Mercedes C-Class Convertible',
-        brand: 'Mercedes-Benz',
-        type: 'Luxury',
-        transmission: 'Automatic',
-        fuel: 'Petrol',
-        seats: 4,
-        pricePerDay: 7999,
-        location: 'Mumbai',
-        image: 'https://images.pexels.com/photos/12463311/pexels-photo-12463311.jpeg',
-        description: 'Drive in style with the elegant Mercedes C-Class Convertible. Perfect for weekend getaways.',
-        features: ['GPS', 'Bluetooth', 'Sunroof', 'Premium Sound'],
-        available: true,
-        serviceType: 'with-driver',
-        createdAt: new Date(),
-      },
-      {
-        id: uuidv4(),
-        name: 'BMW 3 Series',
-        brand: 'BMW',
-        type: 'Sedan',
-        transmission: 'Automatic',
-        fuel: 'Petrol',
-        seats: 5,
-        pricePerDay: 5999,
-        location: 'Delhi',
-        image: 'https://images.unsplash.com/photo-1616932321030-16411c3a6489',
-        description: 'The ultimate driving machine. Sporty, refined, and ready for any road trip.',
-        features: ['GPS', 'Cruise Control', 'Heated Seats', 'Apple CarPlay'],
-        available: true,
-        serviceType: 'self-drive',
-        createdAt: new Date(),
-      },
-      {
-        id: uuidv4(),
-        name: 'Hyundai Creta SUV',
-        brand: 'Hyundai',
-        type: 'SUV',
-        transmission: 'Manual',
-        fuel: 'Diesel',
-        seats: 5,
-        pricePerDay: 2499,
-        location: 'Bangalore',
-        image: 'https://images.pexels.com/photos/19076555/pexels-photo-19076555.jpeg',
-        description: 'Spacious and reliable SUV for family trips and adventure rides.',
-        features: ['GPS', 'AC', 'Bluetooth', 'Reverse Camera'],
-        available: true,
-        serviceType: 'self-drive',
-        createdAt: new Date(),
-      },
-      {
-        id: uuidv4(),
-        name: 'Maruti Swift',
-        brand: 'Maruti Suzuki',
-        type: 'Hatchback',
-        transmission: 'Manual',
-        fuel: 'Petrol',
-        seats: 5,
-        pricePerDay: 1499,
-        location: 'Pune',
-        image: 'https://images.unsplash.com/photo-1592853625597-7d17be820d0c',
-        description: 'Compact, fuel-efficient hatchback. Ideal for city drives and short trips.',
-        features: ['AC', 'Bluetooth', 'Power Steering'],
-        available: true,
-        serviceType: 'self-drive',
-        createdAt: new Date(),
-      },
-      {
-        id: uuidv4(),
-        name: 'Toyota Innova Crysta',
-        brand: 'Toyota',
-        type: 'MPV',
-        transmission: 'Manual',
-        fuel: 'Diesel',
-        seats: 7,
-        pricePerDay: 3499,
-        location: 'Hyderabad',
-        image: 'https://images.unsplash.com/photo-1504366130991-154787072d46',
-        description: 'Spacious 7-seater for family trips. Comfortable, reliable, and powerful.',
-        features: ['AC', 'GPS', 'Bluetooth', 'Captain Seats'],
-        available: true,
-        serviceType: 'with-driver',
-        createdAt: new Date(),
-      },
-      {
-        id: uuidv4(),
-        name: 'BMW M4 Sport',
-        brand: 'BMW',
-        type: 'Sports',
-        transmission: 'Automatic',
-        fuel: 'Petrol',
-        seats: 4,
-        pricePerDay: 12999,
-        location: 'Mumbai',
-        image: 'https://images.pexels.com/photos/10969159/pexels-photo-10969159.jpeg',
-        description: 'Pure adrenaline. The BMW M4 sport delivers track-level performance on open roads.',
-        features: ['GPS', 'Premium Sound', 'Sport Mode', 'Heads Up Display'],
-        available: true,
-        serviceType: 'self-drive',
-        createdAt: new Date(),
-      },
-      {
-        id: uuidv4(),
-        name: 'Audi A6 Premium',
-        brand: 'Audi',
-        type: 'Luxury',
-        transmission: 'Automatic',
-        fuel: 'Petrol',
-        seats: 5,
-        pricePerDay: 8999,
-        location: 'Mumbai',
-        image: 'https://images.pexels.com/photos/3764984/pexels-photo-3764984.jpeg',
-        description: 'Luxury redefined. Experience the smooth ride and advanced technology of the Audi A6.',
-        features: ['GPS', 'Sunroof', 'Matrix LED', 'Bang & Olufsen Sound'],
-        available: true,
-        serviceType: 'with-driver',
-        createdAt: new Date(),
-      },
-    ]
-    await db.collection('cars').insertMany(cars)
-  }
-  // Seed packages
-  const packageCount = await db.collection('packages').countDocuments()
-  if (packageCount === 0) {
-    await db.collection('packages').insertMany([
-      { 
-        id: 'monthly', 
-        name: 'Monthly Premium', 
-        price: 999, 
-        duration: 30, 
-        features: ['5% off all bookings', 'Priority support', 'Free cancellation', 'Exclusive membership badge'],
-        active: true,
-        createdAt: new Date()
-      },
-      { 
-        id: 'yearly', 
-        name: 'Yearly Premium', 
-        price: 9999, 
-        duration: 365, 
-        features: ['10% off all bookings', '2 free upgrade days', 'Priority support', 'Free cancellation', 'VIP fleet access'],
-        active: true,
-        createdAt: new Date()
-      },
-    ])
-  }
+  // Remove the original demo/seed cars so only cars added from the admin
+  // panel are ever shown. Matched by their unique stock-photo URLs, so this
+  // never deletes anything an admin uploads. Idempotent.
+  const SEED_CAR_IMAGES = [
+    'https://images.pexels.com/photos/12463311/pexels-photo-12463311.jpeg',
+    'https://images.unsplash.com/photo-1616932321030-16411c3a6489',
+    'https://images.pexels.com/photos/19076555/pexels-photo-19076555.jpeg',
+    'https://images.unsplash.com/photo-1592853625597-7d17be820d0c',
+    'https://images.unsplash.com/photo-1504366130991-154787072d46',
+    'https://images.pexels.com/photos/10969159/pexels-photo-10969159.jpeg',
+    'https://images.pexels.com/photos/3764984/pexels-photo-3764984.jpeg',
+  ]
+  await db.collection('cars').deleteMany({ image: { $in: SEED_CAR_IMAGES } })
+  // Remove the original demo/seed subscription packages so only packages
+  // added from the admin panel are shown. Admin-created packages get a uuid
+  // id, so deleting these fixed ids never touches real ones. Idempotent.
+  await db.collection('packages').deleteMany({ id: { $in: ['monthly', 'yearly'] } })
   // No blog seeding - blogs will be created via admin panel
 }
 

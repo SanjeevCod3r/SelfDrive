@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export default function EliteTeaser() {
   return (
-    <section className="py-32 bg-[#020617] overflow-hidden relative">
+    <section className="py-32 bg-white overflow-hidden relative">
       {/* Background accents */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-amber-500/5 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3" />
       
@@ -14,13 +14,13 @@ export default function EliteTeaser() {
           
           {/* Left Side: Visual */}
           <div className="lg:w-1/2 relative">
-             <div className="relative z-10 rounded-[60px] overflow-hidden border border-white/10 shadow-2xl">
-                <img 
-                  src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=2070" 
-                  alt="Elite Membership" 
+             <div className="relative z-10 rounded-[60px] overflow-hidden border border-zinc-200 shadow-[0_25px_60px_-15px_rgba(21,22,27,0.25)]">
+                <img
+                  src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=2070"
+                  alt="Elite Membership"
                   className="w-full aspect-[4/5] object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/40 via-transparent to-transparent" />
              </div>
              
              {/* Floating Reward Card */}
@@ -42,11 +42,11 @@ export default function EliteTeaser() {
                 <Star className="size-4 fill-amber-500" />
                 <span>Premium Membership</span>
               </div>
-              <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.9] mb-8">
+              <h2 className="text-5xl md:text-7xl font-black text-charcoal-900 uppercase tracking-tighter leading-[0.9] mb-8">
                 JOIN THE <span className="text-amber-500 text-glow">ELITE CLUB</span> <br />
                 EXPERIENCE LUXURY
               </h2>
-              <p className="text-slate-400 text-lg leading-relaxed max-w-xl">
+              <p className="text-zinc-600 text-lg leading-relaxed max-w-xl">
                 Unlock exclusive discounts, zero-deposit bookings, and priority access to our most prestigious vehicles. Membership is not just about driving; it's about a lifestyle.
               </p>
             </div>
@@ -61,17 +61,17 @@ export default function EliteTeaser() {
                        <item.icon className="size-6 text-amber-500" />
                     </div>
                     <div>
-                       <h5 className="text-white font-black uppercase tracking-tight mb-1">{item.title}</h5>
-                       <p className="text-slate-500 text-xs leading-relaxed font-medium">{item.desc}</p>
+                       <h5 className="text-charcoal-900 font-black uppercase tracking-tight mb-1">{item.title}</h5>
+                       <p className="text-zinc-500 text-xs leading-relaxed font-medium">{item.desc}</p>
                     </div>
                  </div>
                ))}
             </div>
 
             <div className="pt-6">
-              <Link href="/subscriptions" className="group inline-flex items-center gap-6 bg-white text-slate-950 px-10 py-6 rounded-[30px] font-black uppercase tracking-widest text-xs hover:bg-amber-500 transition-all shadow-xl hover:scale-105 active:scale-95">
+              <Link href="/subscriptions" className="group inline-flex items-center gap-6 bg-charcoal-900 text-white px-10 py-6 rounded-[30px] font-black uppercase tracking-widest text-xs hover:bg-amber-500 transition-all shadow-xl hover:scale-105 active:scale-95">
                 Explore Elite Plans
-                <div className="size-8 rounded-full bg-slate-950 flex items-center justify-center text-white group-hover:translate-x-2 transition-transform">
+                <div className="size-8 rounded-full bg-white flex items-center justify-center text-charcoal-900 group-hover:translate-x-2 transition-transform">
                    <ArrowRight className="size-4" />
                 </div>
               </Link>

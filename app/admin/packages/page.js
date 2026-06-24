@@ -87,14 +87,14 @@ export default function AdminPackages() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-          <h1 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">
-            Subscription <span className="text-amber-500">Packages</span>
+          <h1 className="text-4xl font-black text-charcoal-900 uppercase tracking-tighter mb-2">
+            Subscription <span className="text-brand-500">Packages</span>
           </h1>
-          <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Manage user membership plans</p>
+          <p className="text-zinc-500 font-bold uppercase tracking-widest text-[10px]">Manage user membership plans</p>
         </div>
-        <button 
+        <button
           onClick={() => { setEditingPackage(null); setFormData({ name: '', price: '', duration: '', features: '' }); setShowModal(true); }}
-          className="bg-amber-500 text-slate-950 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center gap-2 hover:bg-white transition-all shadow-xl shadow-amber-500/20 active:scale-95"
+          className="bg-brand-500 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center gap-2 hover:bg-brand-600 transition-all shadow-xl shadow-brand-500/20 active:scale-95"
         >
           <Plus className="size-4" /> Create Package
         </button>
@@ -103,53 +103,53 @@ export default function AdminPackages() {
       {/* Packages Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {loading ? (
-          [1,2,3].map(i => <div key={i} className="h-64 bg-slate-900/50 rounded-[40px] animate-pulse border border-white/5" />)
+          [1,2,3].map(i => <div key={i} className="h-64 bg-zinc-50 rounded-[40px] animate-pulse border border-zinc-200" />)
         ) : packages.map((pkg) => (
-          <motion.div 
+          <motion.div
             key={pkg.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="group bg-slate-900/40 backdrop-blur-xl border border-white/5 p-10 rounded-[48px] hover:border-amber-500/30 transition-all duration-500 flex flex-col relative overflow-hidden"
+            className="group bg-zinc-50 border border-zinc-200 p-10 rounded-[48px] hover:border-brand-500/40 transition-all duration-500 flex flex-col relative overflow-hidden shadow-[0_4px_20px_-8px_rgba(21,22,27,0.10)]"
           >
             {/* Top Badge */}
             <div className="absolute top-0 right-0 p-8">
-               <PackageIcon className="size-12 text-white/5 group-hover:text-amber-500/20 transition-colors" />
+               <PackageIcon className="size-12 text-zinc-200 group-hover:text-brand-500/30 transition-colors" />
             </div>
 
             <div className="mb-8">
-              <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-2 group-hover:text-amber-500 transition-colors">{pkg.name}</h3>
+              <h3 className="text-2xl font-black text-charcoal-900 uppercase tracking-tight mb-2 group-hover:text-brand-500 transition-colors">{pkg.name}</h3>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black text-white">₹{pkg.price}</span>
-                <span className="text-xs font-bold text-slate-500 uppercase">/ {pkg.duration} Days</span>
+                <span className="text-4xl font-black text-charcoal-900">₹{pkg.price}</span>
+                <span className="text-xs font-bold text-zinc-500 uppercase">/ {pkg.duration} Days</span>
               </div>
             </div>
 
             <div className="space-y-4 mb-10 flex-1">
               {(Array.isArray(pkg.features) ? pkg.features : []).map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-3 text-slate-400">
-                  <CheckCircle2 className="size-4 text-amber-500" />
+                <div key={idx} className="flex items-center gap-3 text-zinc-600">
+                  <CheckCircle2 className="size-4 text-brand-500" />
                   <span className="text-xs font-bold tracking-wide">{feature}</span>
                 </div>
               ))}
             </div>
 
-            <div className="flex items-center gap-4 pt-8 border-t border-white/5">
-              <button 
+            <div className="flex items-center gap-4 pt-8 border-t border-zinc-200">
+              <button
                 onClick={() => openEdit(pkg)}
-                className="flex-1 bg-white/5 hover:bg-white/10 text-white h-12 rounded-xl flex items-center justify-center gap-2 transition-all font-black uppercase tracking-widest text-[10px]"
+                className="flex-1 bg-charcoal-900 hover:bg-charcoal-800 text-white h-12 rounded-xl flex items-center justify-center gap-2 transition-all font-black uppercase tracking-widest text-[10px]"
               >
-                <Edit2 className="size-3.5 text-amber-500" /> Edit
+                <Edit2 className="size-3.5 text-brand-500" /> Edit
               </button>
-              <button 
+              <button
                 onClick={() => handleDelete(pkg.id)}
-                className="size-12 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all border border-red-500/20"
+                className="size-12 bg-red-50 hover:bg-red-500 text-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all border border-red-200"
               >
                 <Trash2 className="size-4" />
               </button>
             </div>
 
             {/* Background Decoration */}
-            <div className="absolute -bottom-10 -left-10 size-40 bg-amber-500/5 rounded-full blur-3xl" />
+            <div className="absolute -bottom-10 -left-10 size-40 bg-brand-500/5 rounded-full blur-3xl" />
           </motion.div>
         ))}
       </div>
@@ -161,63 +161,63 @@ export default function AdminPackages() {
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setShowModal(false)}
-              className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
+              className="absolute inset-0 bg-charcoal-950/60 backdrop-blur-md"
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-xl bg-slate-900 border border-white/10 rounded-[48px] p-10 md:p-14 shadow-2xl overflow-hidden"
+              className="relative w-full max-w-xl bg-white border border-zinc-200 rounded-[48px] p-10 md:p-14 shadow-2xl overflow-hidden"
             >
-              <button onClick={() => setShowModal(false)} className="absolute top-8 right-8 text-slate-500 hover:text-white transition-colors">
+              <button onClick={() => setShowModal(false)} className="absolute top-8 right-8 text-zinc-500 hover:text-charcoal-900 transition-colors">
                 <X className="size-6" />
               </button>
 
-              <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-10">
-                {editingPackage ? 'Update' : 'Create'} <span className="text-amber-500">Package</span>
+              <h2 className="text-3xl font-black text-charcoal-900 uppercase tracking-tighter mb-10">
+                {editingPackage ? 'Update' : 'Create'} <span className="text-brand-500">Package</span>
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Package Name</label>
-                  <input 
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Package Name</label>
+                  <input
                     required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                     placeholder="e.g. Monthly Premium"
-                    className="w-full bg-slate-950 border border-white/5 h-16 rounded-2xl px-6 text-sm font-bold text-white focus:border-amber-500 outline-none"
+                    className="w-full bg-white border border-zinc-200 h-16 rounded-2xl px-6 text-sm font-bold text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 outline-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Price (₹)</label>
-                    <input 
+                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Price (₹)</label>
+                    <input
                       type="number" required value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})}
                       placeholder="999"
-                      className="w-full bg-slate-950 border border-white/5 h-16 rounded-2xl px-6 text-sm font-bold text-white focus:border-amber-500 outline-none"
+                      className="w-full bg-white border border-zinc-200 h-16 rounded-2xl px-6 text-sm font-bold text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 outline-none"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Duration (Days)</label>
-                    <input 
+                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Duration (Days)</label>
+                    <input
                       type="number" required value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})}
                       placeholder="30"
-                      className="w-full bg-slate-950 border border-white/5 h-16 rounded-2xl px-6 text-sm font-bold text-white focus:border-amber-500 outline-none"
+                      className="w-full bg-white border border-zinc-200 h-16 rounded-2xl px-6 text-sm font-bold text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 outline-none"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Features (comma separated)</label>
-                  <textarea 
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Features (comma separated)</label>
+                  <textarea
                     required value={formData.features} onChange={e => setFormData({...formData, features: e.target.value})}
                     placeholder="5% off bookings, Priority support, Free cancellation"
-                    className="w-full bg-slate-950 border border-white/5 rounded-2xl p-6 min-h-[120px] text-sm font-bold text-white focus:border-amber-500 outline-none resize-none"
+                    className="w-full bg-white border border-zinc-200 rounded-2xl p-6 min-h-[120px] text-sm font-bold text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 outline-none resize-none"
                   />
                 </div>
 
-                <button 
+                <button
                   type="submit"
-                  className="w-full h-16 bg-amber-500 hover:bg-white text-slate-950 font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-amber-500/20 mt-4"
+                  className="w-full h-16 bg-brand-500 hover:bg-brand-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-brand-500/20 mt-4"
                 >
                   {editingPackage ? 'Update Package' : 'Publish Package'}
                 </button>

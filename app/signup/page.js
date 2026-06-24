@@ -57,10 +57,10 @@ export default function SignupPage() {
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-3xl font-black text-charcoal-900 tracking-tight">
               Join Kashika 🚗
             </h1>
-            <p className="text-slate-500 text-sm font-medium mt-1">
+            <p className="text-zinc-500 text-sm font-medium mt-1">
               Create your free account and start driving today
             </p>
           </div>
@@ -70,76 +70,76 @@ export default function SignupPage() {
 
             {/* Full Name */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
                 <input
                   name="name"
                   type="text"
                   required
                   autoComplete="name"
                   placeholder="John Doe"
-                  className="w-full py-3.5 pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-slate-400"
+                  className="w-full py-3.5 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-zinc-400"
                 />
               </div>
             </div>
 
             {/* Phone */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-2">
                 Phone Number
               </label>
               <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
                 <input
                   name="phone"
                   type="tel"
                   autoComplete="tel"
                   placeholder="+91 98765 43210"
-                  className="w-full py-3.5 pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-slate-400"
+                  className="w-full py-3.5 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-zinc-400"
                 />
               </div>
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
                 <input
                   name="email"
                   type="email"
                   required
                   autoComplete="email"
                   placeholder="you@example.com"
-                  className="w-full py-3.5 pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-slate-400"
+                  className="w-full py-3.5 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-zinc-400"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold text-charcoal-900 uppercase tracking-widest mb-2">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
                 <input
                   name="password"
                   type={showPwd ? 'text' : 'password'}
                   required
                   autoComplete="new-password"
                   placeholder="Min. 6 characters"
-                  className="w-full py-3.5 pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/10 transition-all placeholder:text-slate-400"
+                  className="w-full py-3.5 pl-11 pr-12 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-zinc-400"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPwd(!showPwd)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 transition-colors"
                 >
                   {showPwd ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                 </button>
@@ -152,13 +152,13 @@ export default function SignupPage() {
                 type="checkbox"
                 id="terms"
                 required
-                className="mt-0.5 size-4 rounded border-slate-300 text-amber-500 focus:ring-amber-500 accent-amber-500 flex-shrink-0"
+                className="mt-0.5 size-4 rounded border-zinc-300 text-brand-500 focus:ring-brand-500 accent-brand-500 flex-shrink-0"
               />
-              <label htmlFor="terms" className="text-xs text-slate-500 font-medium leading-relaxed">
+              <label htmlFor="terms" className="text-xs text-zinc-500 font-medium leading-relaxed">
                 I agree to the{' '}
-                <Link href="#" className="text-amber-600 font-bold hover:underline">Terms of Service</Link>
+                <Link href="#" className="text-brand-600 font-bold hover:underline">Terms of Service</Link>
                 {' '}and{' '}
-                <Link href="#" className="text-amber-600 font-bold hover:underline">Privacy Policy</Link>
+                <Link href="#" className="text-brand-600 font-bold hover:underline">Privacy Policy</Link>
               </label>
             </div>
 
@@ -173,7 +173,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-white font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm mt-2"
+              className="w-full py-3.5 bg-brand-500 hover:bg-brand-600 active:scale-[0.98] text-white font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm mt-2"
             >
               {loading ? (
                 <span className="size-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -184,32 +184,32 @@ export default function SignupPage() {
           </form>
 
           {/* Switch to login */}
-          <p className="text-center text-sm text-slate-500 font-medium mt-6">
+          <p className="text-center text-sm text-zinc-500 font-medium mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="text-amber-600 font-black hover:underline underline-offset-4">
+            <Link href="/login" className="text-brand-600 font-black hover:underline underline-offset-4">
               Sign in
             </Link>
           </p>
 
           {/* Trust */}
-          <div className="flex items-center justify-center gap-5 mt-8 pt-5 border-t border-slate-100">
-            <div className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
-              <Shield className="size-3.5 text-amber-500" /> Secure
+          <div className="flex items-center justify-center gap-5 mt-8 pt-5 border-t border-zinc-200">
+            <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-medium">
+              <Shield className="size-3.5 text-brand-500" /> Secure
             </div>
-            <span className="w-px h-4 bg-slate-200" />
-            <div className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
-              <Gift className="size-3.5 text-amber-500" /> Free forever
+            <span className="w-px h-4 bg-zinc-200" />
+            <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-medium">
+              <Gift className="size-3.5 text-brand-500" /> Free forever
             </div>
-            <span className="w-px h-4 bg-slate-200" />
-            <div className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
-              <Star className="size-3.5 text-amber-500" /> Earn rewards
+            <span className="w-px h-4 bg-zinc-200" />
+            <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-medium">
+              <Star className="size-3.5 text-brand-500" /> Earn rewards
             </div>
           </div>
         </motion.div>
       </div>
 
       {/* ── RIGHT PANEL — amber with car ── */}
-      <div className="hidden lg:flex lg:w-[45%] bg-amber-500 relative overflow-hidden flex-col justify-between p-12 order-1 lg:order-2">
+      <div className="hidden lg:flex lg:w-[45%] bg-brand-500 relative overflow-hidden flex-col justify-between p-12 order-1 lg:order-2">
         {/* Background circles */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 -translate-y-1/2" />
@@ -237,7 +237,7 @@ export default function SignupPage() {
           <h2 className="text-4xl font-black text-white uppercase tracking-tight leading-tight mb-4">
             Start Your<br />Journey Today
           </h2>
-          <p className="text-amber-100 text-base font-medium max-w-xs">
+          <p className="text-brand-100 text-base font-medium max-w-xs">
             Join thousands of happy drivers who trust Kashika for their road trips.
           </p>
 
@@ -250,14 +250,14 @@ export default function SignupPage() {
             ].map(s => (
               <div key={s.label} className="bg-white/15 rounded-2xl p-3 text-center">
                 <div className="text-xl font-black text-white">{s.val}</div>
-                <div className="text-[10px] font-bold text-amber-100 uppercase tracking-wide mt-0.5">{s.label}</div>
+                <div className="text-[10px] font-bold text-brand-100 uppercase tracking-wide mt-0.5">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="relative z-10 text-amber-100 text-xs font-bold uppercase tracking-widest">
+        <div className="relative z-10 text-brand-100 text-xs font-bold uppercase tracking-widest">
           Your Journey, Your Way
         </div>
       </div>

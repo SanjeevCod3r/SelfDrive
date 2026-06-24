@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, Car } from 'lucide-react'
+import { ChevronDown, Sparkles } from 'lucide-react'
 
 const faqs = [
   {
@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     question: "What documents do I need to rent a car?",
-    answer: "From personalized solutions to expert execution, we prioritize quality, reliability, and customer satisfaction in everything we do. Let us be your trusted partner in achieving success."
+    answer: "You'll need a valid driving licence, a government-issued photo ID (Aadhaar, passport or voter ID) and a recent address proof. Documents can be uploaded digitally during booking for instant verification."
   },
   {
     question: "What types of vehicles are available for rent?",
@@ -30,79 +30,87 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(1)
 
   return (
-    <section className="py-32 bg-white overflow-hidden">
+    <section className="relative overflow-hidden bg-zinc-50 py-24 md:py-28">
       <div className="container mx-auto px-6">
-        
-        <div className="grid lg:grid-cols-12 gap-20 items-start">
-          
-          {/* Left: Image & Badge (Col-5) */}
-          <div className="lg:col-span-5 relative">
-            <div className="flex items-center gap-3 text-amber-500 font-black uppercase tracking-[0.4em] text-[10px] mb-8">
-               <Car className="size-4" />
+
+        <div className="grid items-start gap-16 lg:grid-cols-12 lg:gap-20">
+
+          {/* Left: Heading + Image + Badge */}
+          <div className="relative lg:col-span-5">
+            <div className="mb-6 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-amber-500">
+               <Sparkles className="size-3.5" />
                <span>Our FAQs</span>
             </div>
-            <h5 className="text-3xl md:text-8xl font-black text-[#020617] uppercase tracking-tighter leading-[0.85] mb-16">
-              FREQUENTLY <br /> ASKING ANY <br /> QUESTION
+            <h5 className="mb-12 text-4xl font-black uppercase leading-[0.9] tracking-tighter text-charcoal-900 md:text-6xl">
+              Frequently Asked <span className="text-amber-500">Questions</span>
             </h5>
 
             <div className="relative">
-              <div className="rounded-[60px] overflow-hidden shadow-2xl border-8 border-white">
-                <img 
-                  src="/assests/carRent.jpeg" 
-                  alt="Customer Support" 
-                  className="w-full h-[400px] object-cover"
+              <div className="overflow-hidden rounded-[40px] border-8 border-white shadow-2xl">
+                <img
+                  src="/assests/carsRent.jpeg"
+                  alt="Kasika customer support"
+                  className="h-[380px] w-full object-cover"
                 />
               </div>
-              
-              {/* Massive Experience Badge - Precise Position */}
-              <div className="absolute -bottom-10 right-0 lg:-right-12 bg-gradient-to-br from-amber-400 to-amber-600 p-8 lg:p-12 rounded-[50px] shadow-[0_20px_50px_rgba(245,158,11,0.3)] text-slate-950 min-w-[200px] lg:min-w-[240px] border-8 border-white z-10">
-                 <p className="text-6xl lg:text-8xl font-black leading-none mb-2 tracking-tighter">10</p>
-                 <p className="text-[10px] lg:text-sm font-black uppercase tracking-widest leading-tight">Year of <br/> experience</p>
+
+              {/* Experience badge */}
+              <div className="absolute -bottom-8 right-0 z-10 min-w-[180px] rounded-[32px] border-8 border-white bg-gradient-to-br from-amber-400 to-amber-600 p-8 text-white shadow-[0_20px_50px_rgba(242,106,33,0.3)] lg:-right-8">
+                 <p className="mb-1 text-6xl font-black leading-none tracking-tighter">10</p>
+                 <p className="text-[10px] font-black uppercase leading-tight tracking-widest">Years of <br/> experience</p>
               </div>
             </div>
           </div>
 
-          {/* Right: Accordion (Col-7) */}
-          <div className="lg:col-span-7 space-y-6 lg:pt-24">
-            {faqs.map((faq, index) => (
-              <div 
+          {/* Right: Accordion */}
+          <div className="space-y-4 lg:col-span-7 lg:pt-4">
+            {faqs.map((faq, index) => {
+              const open = openIndex === index
+              return (
+              <motion.div
                 key={index}
-                className={`border rounded-[40px] transition-all duration-500 overflow-hidden ${
-                  openIndex === index 
-                    ? 'border-[#020617] shadow-2xl shadow-slate-200' 
-                    : 'border-slate-100 bg-white hover:border-amber-200'
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.06 }}
+                className={`overflow-hidden rounded-[24px] border transition-all duration-500 ${
+                  open
+                    ? 'border-amber-500 bg-white shadow-[0_10px_40px_-20px_rgba(242,106,33,0.4)]'
+                    : 'border-zinc-200 bg-white hover:border-amber-300'
                 }`}
               >
-                <button 
-                  onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
-                  className="w-full px-12 py-9 flex items-center justify-between text-left group"
+                <button
+                  onClick={() => setOpenIndex(open ? -1 : index)}
+                  className="group flex w-full items-center justify-between gap-4 px-7 py-6 text-left"
                 >
-                  <span className={`text-xl font-black uppercase tracking-tight transition-colors ${
-                    openIndex === index ? 'text-slate-900' : 'text-slate-600 group-hover:text-slate-900'
+                  <span className={`text-base font-black uppercase tracking-tight transition-colors md:text-lg ${
+                    open ? 'text-charcoal-900' : 'text-zinc-600 group-hover:text-charcoal-900'
                   }`}>
                     {faq.question}
                   </span>
-                  <div className={`size-12 rounded-full flex items-center justify-center transition-all ${
-                    openIndex === index ? 'bg-[#0f172a] text-white rotate-180' : 'bg-amber-500 text-white'
+                  <div className={`flex size-10 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${
+                    open ? 'rotate-180 bg-charcoal-900 text-white' : 'bg-amber-500 text-white'
                   }`}>
-                    <ChevronDown className="size-6" />
+                    <ChevronDown className="size-5" />
                   </div>
                 </button>
                 <AnimatePresence>
-                  {openIndex === index && (
+                  {open && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <div className="px-12 pb-10 text-slate-500 font-medium leading-relaxed text-base max-w-2xl">
+                      <div className="max-w-2xl px-7 pb-7 text-sm font-medium leading-relaxed text-zinc-600">
                         {faq.answer}
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
-            ))}
+              </motion.div>
+              )
+            })}
           </div>
 
         </div>

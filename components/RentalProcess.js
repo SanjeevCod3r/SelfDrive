@@ -20,29 +20,29 @@ export default function RentalProcess() {
   ]
 
   return (
-    <section className="py-24 bg-slate-900 border-t border-slate-800">
+    <section className="py-24 bg-zinc-50 border-t border-zinc-200">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="text-amber-500 font-bold uppercase tracking-[0.2em] text-[10px] mb-4">How It Works</div>
-          <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-6">
+          <h2 className="text-4xl md:text-5xl font-black text-charcoal-900 uppercase tracking-tighter mb-6">
             3 Steps to <span className="text-amber-500">Freedom</span>
           </h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 relative">
           {/* Connecting Line */}
-          <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-px bg-slate-800" />
-          
+          <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-px bg-zinc-200" />
+
           {steps.map((step, idx) => (
             <div key={idx} className="relative text-center group">
-              <div className="relative mx-auto size-24 bg-slate-950 border-4 border-slate-900 rounded-full flex items-center justify-center z-10 mb-6 group-hover:border-amber-500 transition-colors">
-                <step.icon className="size-8 text-white group-hover:text-amber-500 transition-colors" />
-                <div className="absolute -top-2 -right-2 size-8 bg-amber-500 text-slate-950 rounded-full flex items-center justify-center font-black text-sm">
+              <div className="relative mx-auto size-24 bg-white border-4 border-zinc-200 rounded-full flex items-center justify-center z-10 mb-6 shadow-[0_10px_40px_-15px_rgba(21,22,27,0.12)] group-hover:border-amber-500 transition-colors">
+                <step.icon className="size-8 text-charcoal-900 group-hover:text-amber-500 transition-colors" />
+                <div className="absolute -top-2 -right-2 size-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-black text-sm">
                   {idx + 1}
                 </div>
               </div>
-              <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-3">{step.title}</h3>
-              <p className="text-slate-400 font-medium">{step.desc}</p>
+              <h3 className="text-2xl font-black text-charcoal-900 uppercase tracking-tight mb-3">{step.title}</h3>
+              <p className="text-zinc-600 font-medium">{step.desc}</p>
             </div>
           ))}
         </div>

@@ -52,55 +52,55 @@ export default function AdminFleetCars() {
 
   return (
     <div>
-      <h2 className="text-2xl font-black text-white uppercase tracking-tight mb-8">Manage Fleet (With Driver) Cars</h2>
-      
+      <h2 className="text-2xl font-black text-charcoal-900 uppercase tracking-tight mb-8">Manage Fleet (With Driver) Cars</h2>
+
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
-          {loading ? <Zap className="size-8 text-amber-500 animate-pulse" /> : cars.length > 0 ? cars.map(car => (
-            <div key={car.id} className="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex items-center gap-4">
-              <img src={car.image || '/assests/bmw_x5_hero.png'} alt={car.name} className="size-16 object-cover rounded-xl" />
+          {loading ? <Zap className="size-8 text-brand-500 animate-pulse" /> : cars.length > 0 ? cars.map(car => (
+            <div key={car.id} className="bg-zinc-50 border border-zinc-200 shadow-sm p-4 rounded-2xl flex items-center gap-4">
+              <img src={car.image || '/assests/bmw_x5_hero.png'} alt={car.name} className="size-16 object-cover rounded-xl bg-zinc-100" />
               <div className="flex-1">
-                <h4 className="text-white font-black uppercase">{car.brand} {car.name}</h4>
-                <div className="text-slate-500 text-xs font-bold uppercase tracking-widest">
+                <h4 className="text-charcoal-900 font-black uppercase">{car.brand} {car.name}</h4>
+                <div className="text-zinc-500 text-xs font-bold uppercase tracking-widest">
                   {car.type} &middot; ₹{car.pricePerDay}/day &middot; {car.serviceType}
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button variant="ghost" className="size-10 p-0 text-slate-500 hover:text-white"><Edit2 className="size-4" /></Button>
-                <Button onClick={() => handleDelete(car.id)} variant="ghost" className="size-10 p-0 text-red-500 hover:text-red-400 hover:bg-red-500/10"><Trash2 className="size-4" /></Button>
+                <Button variant="ghost" className="size-10 p-0 text-zinc-500 hover:text-charcoal-900"><Edit2 className="size-4" /></Button>
+                <Button onClick={() => handleDelete(car.id)} variant="ghost" className="size-10 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"><Trash2 className="size-4" /></Button>
               </div>
             </div>
           )) : (
-            <div className="text-slate-500 font-bold uppercase tracking-widest text-center py-12 bg-slate-950 border border-slate-800 rounded-2xl">
+            <div className="text-zinc-500 font-bold uppercase tracking-widest text-center py-12 bg-zinc-50 border border-zinc-200 rounded-2xl">
               No fleet cars found
             </div>
           )}
         </div>
 
         <div>
-          <div className="bg-slate-950 border border-slate-800 rounded-3xl p-6 sticky top-8">
-            <h3 className="text-lg font-black text-white uppercase tracking-tight mb-4 flex items-center gap-2"><Plus className="size-5 text-amber-500"/> Add New Fleet Car</h3>
+          <div className="bg-zinc-50 border border-zinc-200 shadow-sm rounded-3xl p-6 sticky top-8">
+            <h3 className="text-lg font-black text-charcoal-900 uppercase tracking-tight mb-4 flex items-center gap-2"><Plus className="size-5 text-brand-500"/> Add New Fleet Car</h3>
             <form onSubmit={handleAddCar} className="space-y-4">
-              <input name="name" placeholder="Car Name (e.g. Innova)" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
-              <input name="brand" placeholder="Brand (e.g. Toyota)" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
+              <input name="name" placeholder="Car Name (e.g. Innova)" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
+              <input name="brand" placeholder="Brand (e.g. Toyota)" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
               <div className="grid grid-cols-2 gap-4">
-                <input name="type" placeholder="Category (e.g. MPV)" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
-                <select name="serviceType" defaultValue="with-driver" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white appearance-none">
+                <input name="type" placeholder="Category (e.g. MPV)" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
+                <select name="serviceType" defaultValue="with-driver" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 focus:border-brand-500 focus:outline-none appearance-none">
                   <option value="with-driver">Fleet Only (With Driver)</option>
                   <option value="both">Both Services</option>
                 </select>
               </div>
-              <input name="pricePerDay" type="number" placeholder="Price Per Day (₹)" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
+              <input name="pricePerDay" type="number" placeholder="Price Per Day (₹)" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
               <div className="grid grid-cols-2 gap-4">
-                <input name="seats" type="number" placeholder="Seats" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
-                <input name="transmission" placeholder="Transmission" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
+                <input name="seats" type="number" placeholder="Seats" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
+                <input name="transmission" placeholder="Transmission" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
               </div>
-              <input name="fuel" placeholder="Fuel Type (e.g. Diesel)" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
-              <input name="location" placeholder="City (e.g. Mumbai)" required className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
-              <input name="image" placeholder="Image URL" className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
-              <input name="description" placeholder="Short description (optional)" className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
-              <input name="features" placeholder="Features (comma-separated: GPS,AC,Bluetooth)" className="w-full bg-slate-900 border border-slate-800 h-12 rounded-xl px-4 text-white" />
-              <Button type="submit" className="w-full bg-amber-500 text-slate-950 font-black uppercase tracking-widest h-12 rounded-xl">Save Car</Button>
+              <input name="fuel" placeholder="Fuel Type (e.g. Diesel)" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
+              <input name="location" placeholder="City (e.g. Mumbai)" required className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
+              <input name="image" placeholder="Image URL" className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
+              <input name="description" placeholder="Short description (optional)" className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
+              <input name="features" placeholder="Features (comma-separated: GPS,AC,Bluetooth)" className="w-full bg-white border border-zinc-200 h-12 rounded-xl px-4 text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none" />
+              <Button type="submit" className="w-full bg-brand-500 text-white font-black uppercase tracking-widest h-12 rounded-xl hover:bg-brand-600">Save Car</Button>
             </form>
           </div>
         </div>

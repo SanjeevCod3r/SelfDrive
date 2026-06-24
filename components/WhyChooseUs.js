@@ -1,84 +1,82 @@
 'use client'
 import { motion } from 'framer-motion'
-import { Shield, MapPin, Smile, ArrowRight } from 'lucide-react'
+import { Shield, MapPin, Smile, ArrowRight, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
 const features = [
   {
     icon: Shield,
     title: "Easy & Fast Booking",
-    desc: "Car service is essential for maintaining performance and longevity of vehicle. From oil changes. Dominion fowe there light she does lights begining subdue.",
-    btnText: "Rent Now"
+    desc: "Reserve your car in under two minutes. A clean, transparent flow with instant confirmation — no paperwork, no waiting.",
   },
   {
     icon: MapPin,
-    title: "Many Pickup Location",
-    desc: "Car service is essential for maintaining performance and longevity of vehicle. From oil changes. Dominion fowe there light she does lights begining subdue.",
-    btnText: "Rent Now"
+    title: "Many Pickup Locations",
+    desc: "Pick up and drop off across every major city in India. Doorstep delivery available so your ride reaches you, wherever you are.",
   },
   {
     icon: Smile,
     title: "Customer Satisfaction",
-    desc: "Car service is essential for maintaining performance and longevity of vehicle. From oil changes. Dominion fowe there light she does lights begining subdue.",
-    btnText: "Rent Now"
+    desc: "Well-maintained vehicles, 24/7 roadside support and a dedicated team that puts your journey first, every single time.",
   }
 ]
 
 export default function WhyChooseUs() {
   return (
-    <section className="py-32 bg-white overflow-hidden">
-      <div className="container mx-auto px-6">
-        
+    <section className="relative overflow-hidden bg-white py-24 md:py-28">
+      {/* Soft amber glow accent */}
+      <div className="pointer-events-none absolute right-0 top-1/3 size-[500px] translate-x-1/3 rounded-full bg-amber-500/5 blur-[120px]" />
+
+      <div className="container relative z-10 mx-auto px-6">
+
         {/* Header */}
-        <div className="text-center mb-24">
-          <div className="flex items-center justify-center gap-2 text-amber-500 font-black uppercase tracking-[0.4em] text-[10px] mb-6">
-             <div className="w-8 h-px bg-amber-500" />
+        <div className="mb-16 text-center md:mb-20">
+          <div className="mb-6 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] text-amber-500">
+             <div className="h-px w-8 bg-amber-500/40" />
+             <Sparkles className="size-3.5" />
              <span>Why Choose Us</span>
-             <div className="w-8 h-px bg-amber-500" />
+             <div className="h-px w-8 bg-amber-500/40" />
           </div>
-          <h2 className="text-5xl md:text-7xl font-black text-[#020617] uppercase tracking-tighter leading-[0.9] max-w-5xl mx-auto">
-            WE ARE INNOVATIVE AND PASSIONATE <br /> ABOUT THE WORK WE DO.
+          <h2 className="mx-auto max-w-3xl text-4xl font-black uppercase leading-[0.95] tracking-tighter text-charcoal-900 md:text-6xl">
+            Innovative &amp; Passionate <span className="text-amber-500">About Every Drive</span>
           </h2>
         </div>
 
         {/* Features Grid */}
-        <div className="grid lg:grid-cols-3 gap-12">
+        <div className="grid gap-8 lg:grid-cols-3">
           {features.map((item, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative group"
+              transition={{ delay: i * 0.12, duration: 0.6 }}
+              className="group relative flex flex-col rounded-[32px] border border-zinc-200 bg-zinc-50 p-10 shadow-[0_10px_40px_-20px_rgba(21,22,27,0.15)] transition-all duration-500 hover:-translate-y-2 hover:border-amber-500/40 hover:bg-white hover:shadow-[0_30px_60px_-25px_rgba(242,106,33,0.35)]"
             >
-              {/* Main Card */}
-              <div className="bg-[#0f172a] rounded-[60px] p-12 h-full flex flex-col items-center text-center relative overflow-visible mt-10">
-                 
-                 {/* The "Carved" Icon Container */}
-                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4">
-                    <div className="relative">
-                       {/* Yellow Circle */}
-                       <div className="size-24 bg-amber-500 rounded-full flex items-center justify-center text-slate-950 shadow-2xl shadow-amber-500/30 border-[8px] border-white z-10 group-hover:scale-110 transition-transform duration-500">
-                          <item.icon className="size-8 stroke-[2.5]" />
-                       </div>
-                       {/* Small inner circle decoration from image */}
-                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[110px] border border-amber-500/20 rounded-full" />
-                    </div>
-                 </div>
-
-                 <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-8 mt-4 leading-tight">{item.title}</h3>
-                 <p className="text-slate-400 font-medium leading-relaxed mb-12 text-sm">{item.desc}</p>
-                 
-                 <div className="mt-auto w-full flex justify-start">
-                    <Link href="/self-drive" className="inline-flex items-center gap-3 bg-amber-500 hover:bg-white text-slate-950 font-black uppercase tracking-widest text-[11px] h-14 px-10 rounded-2xl transition-all shadow-xl shadow-amber-500/10">
-                       {item.btnText} <ArrowRight className="size-4" />
-                    </Link>
-                 </div>
+              {/* Icon badge */}
+              <div className="mb-8 flex size-16 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-lg shadow-amber-500/25 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                <item.icon className="size-7 stroke-[2.5]" />
               </div>
 
-              {/* Offset shadow shape from image */}
-              <div className="absolute -z-10 bottom-0 right-0 w-[90%] h-[90%] bg-slate-900 rounded-[60px] translate-x-4 translate-y-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <h3 className="mb-4 text-2xl font-black uppercase leading-tight tracking-tight text-charcoal-900">
+                {item.title}
+              </h3>
+              <p className="mb-10 flex-1 text-sm font-medium leading-relaxed text-zinc-500">
+                {item.desc}
+              </p>
+
+              <Link
+                href="/self-drive"
+                className="group/btn mt-auto inline-flex w-fit items-center gap-2 text-xs font-black uppercase tracking-widest text-charcoal-900 transition-colors hover:text-amber-500"
+              >
+                Rent Now
+                <ArrowRight className="size-4 transition-transform group-hover/btn:translate-x-1" />
+              </Link>
+
+              {/* Large faded number */}
+              <span className="pointer-events-none absolute right-8 top-8 text-5xl font-black text-charcoal-900/[0.04] transition-colors group-hover:text-amber-500/10">
+                0{i + 1}
+              </span>
             </motion.div>
           ))}
         </div>
