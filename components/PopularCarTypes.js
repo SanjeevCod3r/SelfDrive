@@ -16,7 +16,7 @@ export default function PopularCarTypes() {
     <section className="bg-zinc-50 pt-24 pb-40 overflow-hidden relative">
       {/* Background Car Silhouette Decoration */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-5 pointer-events-none">
-         <h2 className="text-[250px] font-black text-charcoal-900/10 uppercase tracking-tighter text-center">KASIKA</h2>
+         <h2 className="text-[250px] font-black text-charcoal-900/10 uppercase tracking-tighter text-center">KASHI KA</h2>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">

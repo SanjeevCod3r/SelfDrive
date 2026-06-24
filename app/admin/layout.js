@@ -121,7 +121,7 @@ function AdminLoginPage({ onLogin, onSignup }) {
           <Link href="/">
             <img
               src="/assests/kashika logo.png"
-              alt="Kasika Logo"
+              alt="Kashi Ka Logo"
               className="h-24 w-auto object-contain mx-auto mb-6"
             />
           </Link>
@@ -288,7 +288,7 @@ export default function AdminLayout({ children }) {
               <Shield className="size-5 text-white" />
             </div>
             <div>
-              <div className="text-white font-black text-sm uppercase tracking-tight">Kasika Admin</div>
+              <div className="text-white font-black text-sm uppercase tracking-tight">Kashi Ka Admin</div>
               <div className="text-zinc-500 text-[10px] font-medium">{admin.email}</div>
             </div>
           </div>

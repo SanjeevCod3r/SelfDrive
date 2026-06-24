@@ -27,7 +27,7 @@ export default function SubscriptionsPage() {
               className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-2 backdrop-blur-md"
             >
               <Crown className="size-4 fill-brand-500 text-brand-500" />
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-400">Kasika Elite Club</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-400">Kashi Ka Elite Club</span>
             </motion.div>
             <motion.h1
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}

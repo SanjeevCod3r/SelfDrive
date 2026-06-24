@@ -2,7 +2,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 
 export const metadata = {
-  title: 'Kasika Self Drive Car | Premium Car Rentals in India',
+  title: 'Kashi Ka Self Drive Car | Premium Car Rentals in India',
   description: 'Book premium self-drive cars in India. Hourly, daily, monthly & yearly rentals. Earn rewards on every booking.',
 }
 

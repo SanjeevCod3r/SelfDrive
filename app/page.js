@@ -49,7 +49,7 @@ export default function LandingPage() {
           </Button>
         </div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[300px] font-black text-white/10 select-none pointer-events-none uppercase tracking-tighter">
-          Kasika
+          Kashi Ka
         </div>
       </section>
     </div>

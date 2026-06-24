@@ -39,7 +39,7 @@ export default function Pricing({ showBanner = true }) {
         key: res.key,
         amount: res.amount * 100,
         currency: res.currency,
-        name: 'Kasika Premium',
+        name: 'Kashi Ka Premium',
         description: `Subscription to ${planId} plan`,
         order_id: res.orderId,
         handler: async (response) => {
@@ -51,7 +51,7 @@ export default function Pricing({ showBanner = true }) {
                 subscriptionId: res.subscriptionId
               })
             })
-            toast.success('Welcome to Kasika Premium!')
+            toast.success('Welcome to Kashi Ka Premium!')
             window.location.reload()
           } catch (e) {
             toast.error('Verification failed')

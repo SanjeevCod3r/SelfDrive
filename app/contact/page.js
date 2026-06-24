@@ -39,7 +39,7 @@ export default function ContactPage() {
       <section className="relative flex min-h-[60vh] items-center overflow-hidden bg-charcoal-950 pb-40">
         <img
           src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?q=80&w=2400&auto=format&fit=crop"
-          alt="Contact Kasika"
+          alt="Contact Kashi Ka"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-charcoal-950 via-charcoal-950/85 to-charcoal-950/30" />

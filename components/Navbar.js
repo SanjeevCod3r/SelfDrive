@@ -50,10 +50,10 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
-            <img src="/assests/kashika logo.png" alt="Kasika Logo" className="h-12 w-auto object-contain transition-transform group-hover:scale-110 duration-500" />
+            <img src="/assests/kashika logo.png" alt="Kashi Ka Logo" className="h-12 w-auto object-contain transition-transform group-hover:scale-110 duration-500" />
             <div className="flex flex-col">
               <span className="text-2xl font-black leading-none tracking-tighter text-slate-900">
-                Kasika<span className="text-amber-500">.</span>
+                Kashi Ka<span className="text-amber-500">.</span>
               </span>
             </div>
           </Link>
@@ -123,7 +123,7 @@ export default function Navbar() {
                   onClick={() => openAuth('login')} 
                   className="bg-amber-500 text-white hover:bg-charcoal-900 font-black uppercase tracking-[0.2em] text-[10px] h-12 px-8 rounded-2xl transition-all shadow-xl shadow-amber-500/10"
                 >
-                  Join Kasika
+                  Join Kashi Ka
                 </Button>
               )}
             </div>
@@ -166,8 +166,8 @@ export default function Navbar() {
               {/* Drawer header */}
               <div className="flex items-center justify-between border-b border-zinc-100 px-6 py-5">
                 <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
-                  <img src="/assests/kashika logo.png" alt="Kasika" className="h-9 w-auto object-contain" />
-                  <span className="text-xl font-black tracking-tighter text-charcoal-900">Kasika<span className="text-amber-500">.</span></span>
+                  <img src="/assests/kashika logo.png" alt="Kashi Ka" className="h-9 w-auto object-contain" />
+                  <span className="text-xl font-black tracking-tighter text-charcoal-900">Kashi Ka<span className="text-amber-500">.</span></span>
                 </Link>
                 <button
                   aria-label="Close menu"
@@ -255,7 +255,7 @@ export default function Navbar() {
                     onClick={() => { openAuth('login'); setMobileMenuOpen(false) }}
                     className="flex w-full items-center justify-center gap-2 rounded-2xl bg-amber-500 py-4 text-xs font-black uppercase tracking-widest text-white transition-all hover:bg-charcoal-900 active:scale-95"
                   >
-                    <Crown className="size-4" /> Join Kasika
+                    <Crown className="size-4" /> Join Kashi Ka
                   </button>
                 )}
               </div>

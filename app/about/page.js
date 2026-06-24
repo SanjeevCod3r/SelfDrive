@@ -55,7 +55,7 @@ export default function AboutPage() {
       <section className="relative mb-24 flex min-h-[70vh] items-center overflow-hidden bg-charcoal-950">
         <img
           src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=2400&auto=format&fit=crop"
-          alt="The Kasika story"
+          alt="The Kashi Ka story"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-charcoal-950 via-charcoal-950/85 to-charcoal-950/30" />
@@ -80,14 +80,14 @@ export default function AboutPage() {
               variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
               className="mb-6 text-5xl font-black uppercase tracking-tighter text-white md:text-8xl"
             >
-              The Kasika <span className="text-amber-500">Story</span>
+              The Kashi Ka <span className="text-amber-500">Story</span>
             </motion.h1>
             <motion.p
               variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
               className="max-w-2xl text-lg font-medium leading-relaxed text-zinc-300"
             >
               Founded with a passion for the open road and an uncompromising dedication to luxury,
-              Kasika is redefining the self-drive and chauffeured experience in India — where every
+              Kashi Ka is redefining the self-drive and chauffeured experience in India — where every
               journey becomes an unforgettable adventure.
             </motion.p>
           </motion.div>
@@ -103,7 +103,7 @@ export default function AboutPage() {
           {/* Decorative watermark + glow */}
           <div className="pointer-events-none absolute right-0 top-1/2 size-[400px] -translate-y-1/2 translate-x-1/3 rounded-full bg-amber-500/10 blur-[100px]" />
           <span className="pointer-events-none absolute -bottom-8 left-1/2 -translate-x-1/2 select-none text-[160px] font-black uppercase tracking-tighter text-charcoal-900/[0.03]">
-            Kasika
+            Kashi Ka
           </span>
 
           <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -205,7 +205,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── The Kasika Difference ── */}
+      {/* ── The Kashi Ka Difference ── */}
       <section className="container mx-auto mb-28 px-6">
         <div className="mb-16 text-center">
           <div className="mb-6 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] text-amber-500">
@@ -215,7 +215,7 @@ export default function AboutPage() {
             <div className="h-px w-8 bg-amber-500/40" />
           </div>
           <h2 className="text-4xl font-black uppercase tracking-tighter text-charcoal-900 md:text-6xl">
-            The Kasika <span className="text-amber-500">Difference</span>
+            The Kashi Ka <span className="text-amber-500">Difference</span>
           </h2>
         </div>
 
@@ -249,7 +249,7 @@ export default function AboutPage() {
           className="relative overflow-hidden rounded-[40px] bg-amber-500 px-8 py-16 text-center shadow-[0_30px_70px_-25px_rgba(242,106,33,0.5)]"
         >
           <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none text-[200px] font-black uppercase tracking-tighter text-white/10">
-            Kasika
+            Kashi Ka
           </span>
           <div className="relative">
             <h2 className="mx-auto mb-8 max-w-2xl text-3xl font-black uppercase leading-tight tracking-tighter text-charcoal-900 md:text-5xl">

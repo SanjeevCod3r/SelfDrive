@@ -49,7 +49,7 @@ export default function SignupPage() {
             <Link href="/">
               <img
                 src="/assests/kashika logo.png"
-                alt="Kashika Self Drive"
+                alt="Kashi Ka Self Drive"
                 className="h-16 w-auto object-contain mx-auto"
               />
             </Link>
@@ -58,7 +58,7 @@ export default function SignupPage() {
           {/* Heading */}
           <div className="mb-8">
             <h1 className="text-3xl font-black text-charcoal-900 tracking-tight">
-              Join Kashika 🚗
+              Join Kashi Ka 🚗
             </h1>
             <p className="text-zinc-500 text-sm font-medium mt-1">
               Create your free account and start driving today
@@ -221,7 +221,7 @@ export default function SignupPage() {
           <Link href="/">
             <img
               src="/assests/kashika logo.png"
-              alt="Kashika Self Drive"
+              alt="Kashi Ka Self Drive"
               className="h-16 w-auto object-contain"
             />
           </Link>
@@ -238,7 +238,7 @@ export default function SignupPage() {
             Start Your<br />Journey Today
           </h2>
           <p className="text-brand-100 text-base font-medium max-w-xs">
-            Join thousands of happy drivers who trust Kashika for their road trips.
+            Join thousands of happy drivers who trust Kashi Ka for their road trips.
           </p>
 
           {/* Stats */}

@@ -6,7 +6,7 @@ import { ChevronDown, Sparkles } from 'lucide-react'
 const faqs = [
   {
     question: "How old do I need to be to rent a car?",
-    answer: "You must be at least 21 years old to rent a self-drive car with Kasika. For luxury vehicles, the minimum age requirement may be 25 years. A valid driver's license is mandatory."
+    answer: "You must be at least 21 years old to rent a self-drive car with Kashi Ka. For luxury vehicles, the minimum age requirement may be 25 years. A valid driver's license is mandatory."
   },
   {
     question: "What documents do I need to rent a car?",
@@ -49,7 +49,7 @@ export default function FAQ() {
               <div className="overflow-hidden rounded-[40px] border-8 border-white shadow-2xl">
                 <img
                   src="/assests/carsRent.jpeg"
-                  alt="Kasika customer support"
+                  alt="Kashi Ka customer support"
                   className="h-[380px] w-full object-cover"
                 />
               </div>

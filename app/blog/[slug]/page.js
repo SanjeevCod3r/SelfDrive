@@ -7,7 +7,7 @@ export async function generateMetadata({ params }) {
   const post = await db.collection('blogs').findOne({ slug: params.slug })
   return {
     title: post ? `Blog | ${post.title}` : 'Post Not Found',
-    description: post ? post.excerpt || post.content?.substring(0, 100) : 'Kasika Road Trip Journal.',
+    description: post ? post.excerpt || post.content?.substring(0, 100) : 'Kashi Ka Road Trip Journal.',
   }
 }
 

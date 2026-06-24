@@ -30,7 +30,7 @@ export default function EliteTeaser() {
                className="absolute -bottom-10 -right-10 bg-amber-500 p-8 rounded-[40px] shadow-2xl z-20 hidden md:block max-w-[280px]"
              >
                 <Crown className="size-10 text-slate-950 mb-4" />
-                <h4 className="text-xl font-black text-slate-950 uppercase tracking-tight mb-2">Kasika Rewards</h4>
+                <h4 className="text-xl font-black text-slate-950 uppercase tracking-tight mb-2">Kashi Ka Rewards</h4>
                 <p className="text-slate-950/70 text-sm font-bold uppercase tracking-widest">Members earn 10 points for every ₹1000 spent.</p>
              </motion.div>
           </div>

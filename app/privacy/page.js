@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
               Privacy <span className="text-amber-500">Policy</span>
             </h1>
             <p className="text-zinc-300 font-bold uppercase tracking-widest text-xs max-w-2xl">
-              Your trust is our most valuable asset. Learn how we protect and respect your personal information at Kasika.
+              Your trust is our most valuable asset. Learn how we protect and respect your personal information at Kashi Ka.
             </p>
           </motion.div>
         </div>
@@ -54,7 +54,7 @@ export default function PrivacyPolicy() {
                    <h2 className="text-3xl font-black uppercase tracking-tight text-charcoal-900">How We Use Your Data</h2>
                 </div>
                 <p className="text-zinc-700 leading-relaxed font-medium text-lg">
-                   Your data is used to process bookings, verify driver eligibility, and provide a personalized experience. We do not sell your personal information to third parties. We may use your email to send updates about your rentals or exclusive Kasika Elite rewards.
+                   Your data is used to process bookings, verify driver eligibility, and provide a personalized experience. We do not sell your personal information to third parties. We may use your email to send updates about your rentals or exclusive Kashi Ka Elite rewards.
                 </p>
              </div>
 
@@ -72,7 +72,7 @@ export default function PrivacyPolicy() {
 
              <div className="pt-20 border-t border-zinc-200">
                 <p className="text-zinc-500 text-sm font-bold uppercase tracking-widest text-center">
-                   Last Updated: October 2023 | Kasika Premium Fleet
+                   Last Updated: October 2023 | Kashi Ka Premium Fleet
                 </p>
              </div>
 

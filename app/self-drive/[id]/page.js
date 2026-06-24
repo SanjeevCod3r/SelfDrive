@@ -123,7 +123,7 @@ export default function SelfDriveDetail() {
         key: order.key,
         amount: order.amount * 100,
         currency: 'INR',
-        name: 'Kasika Self Drive',
+        name: 'Kashi Ka Self Drive',
         description: `Booking: ${car.name}`,
         order_id: order.orderId,
         prefill: { name: user.name, email: user.email, contact: user.phone || '' },

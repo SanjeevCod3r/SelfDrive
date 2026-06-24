@@ -44,7 +44,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-3 group">
               <img
                 src="/assests/kashika logo.png"
-                alt="Kashika Self Drive"
+                alt="Kashi Ka Self Drive"
                 className="h-14 w-auto object-contain"
               />
             </Link>
@@ -100,7 +100,7 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3.5">
               {[
-                { name: 'About Kasika', href: '/about' },
+                { name: 'About Kashi Ka', href: '/about' },
                 { name: 'Latest Blog', href: '/blog' },
                 { name: 'Contact Us', href: '/contact' },
                 { name: 'Privacy Policy', href: '/privacy' },
@@ -163,7 +163,7 @@ export default function Footer() {
               <MessageSquare className="size-4 text-white" />
             </div>
             <p className="text-slate-500 text-sm">
-              © 2025 Kasika. All Rights Reserved.
+              © 2025 Kashi Ka. All Rights Reserved.
             </p>
           </div>
           <div className="flex items-center gap-6">

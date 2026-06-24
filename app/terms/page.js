@@ -22,7 +22,7 @@ export default function TermsConditions() {
               Terms & <br /> <span className="text-amber-500">Conditions</span>
             </h1>
             <p className="text-zinc-300 font-bold uppercase tracking-widest text-xs max-w-2xl">
-              The rules of the road for Kasika. Please read these terms carefully before booking your premium experience.
+              The rules of the road for Kashi Ka. Please read these terms carefully before booking your premium experience.
             </p>
           </motion.div>
         </div>

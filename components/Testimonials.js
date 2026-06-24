@@ -36,7 +36,7 @@ export default function Testimonials() {
                <span>Our Testimonial</span>
             </div>
             <h2 className="text-3xl md:text-8xl font-black text-charcoal-900 uppercase tracking-tighter leading-none">
-              What Peoples Say <br /> <span className="text-amber-500">About Kasika</span>
+              What Peoples Say <br /> <span className="text-amber-500">About Kashi Ka</span>
             </h2>
           </div>
           

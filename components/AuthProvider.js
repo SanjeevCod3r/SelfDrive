@@ -50,7 +50,7 @@ function AuthModal({ authModal, setAuthModal, login, signup }) {
           <div className="mb-5">
             <img
               src="/assests/kashika logo.png"
-              alt="Kashika Self Drive"
+              alt="Kashi Ka Self Drive"
               className="h-20 w-auto object-contain mx-auto"
             />
           </div>
@@ -61,7 +61,7 @@ function AuthModal({ authModal, setAuthModal, login, signup }) {
           <p className="text-zinc-500 text-sm font-medium mt-1">
             {isLogin
               ? 'Sign in to manage your bookings'
-              : 'Join Kashika and start your journey'}
+              : 'Join Kashi Ka and start your journey'}
           </p>
         </div>
 

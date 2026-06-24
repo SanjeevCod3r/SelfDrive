@@ -29,7 +29,7 @@ export default function Services() {
     <section className="py-24 bg-zinc-50 relative border-t border-zinc-200">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="text-amber-500 font-bold uppercase tracking-[0.2em] text-[10px] mb-4">Kasika Advantages</div>
+          <div className="text-amber-500 font-bold uppercase tracking-[0.2em] text-[10px] mb-4">Kashi Ka Advantages</div>
           <h2 className="text-4xl md:text-5xl font-black text-charcoal-900 uppercase tracking-tighter mb-6">
             Why Drive <span className="text-amber-500">With Us?</span>
           </h2>

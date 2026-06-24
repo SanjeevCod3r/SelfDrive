@@ -26,14 +26,14 @@ export default function AboutUs() {
           </div>
 
           <div>
-            <div className="text-amber-500 font-bold uppercase tracking-[0.2em] text-[10px] mb-4">About Kasika</div>
+            <div className="text-amber-500 font-bold uppercase tracking-[0.2em] text-[10px] mb-4">About Kashi Ka</div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-charcoal-900 uppercase tracking-tighter mb-8 leading-[0.9]">
               Redefining <br />
               <span className="text-amber-500">Self-Drive</span> Mobility
             </h2>
 
             <p className="text-zinc-600 font-medium text-lg leading-relaxed mb-8">
-              Kasika was born out of a simple idea: that the journey should be just as exhilarating as the destination. We provide a premium fleet of impeccably maintained vehicles that offer ultimate freedom and comfort.
+              Kashi Ka was born out of a simple idea: that the journey should be just as exhilarating as the destination. We provide a premium fleet of impeccably maintained vehicles that offer ultimate freedom and comfort.
             </p>
 
             <div className="grid grid-cols-2 gap-8 mb-10">

@@ -3,8 +3,8 @@ import { ArrowRight, Calendar, User, Sparkles } from 'lucide-react'
 import { getDb } from '@/lib/mongo'
 
 export const metadata = {
-  title: 'Blog | Kasika Self Drive',
-  description: 'Read the latest road trip guides, travel tips, and updates from Kasika.'
+  title: 'Blog | Kashi Ka Self Drive',
+  description: 'Read the latest road trip guides, travel tips, and updates from Kashi Ka.'
 }
 
 export default async function BlogList() {
@@ -34,7 +34,7 @@ export default async function BlogList() {
               Perspectives <span className="text-amber-500">&amp; Insights</span>
             </h1>
             <p className="text-zinc-300 font-medium text-lg md:text-xl leading-relaxed max-w-2xl">
-              Expert travel itineraries, technical driving guides, and the latest news from the Kasika fleet.
+              Expert travel itineraries, technical driving guides, and the latest news from the Kashi Ka fleet.
             </p>
           </div>
         </div>

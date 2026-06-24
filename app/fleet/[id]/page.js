@@ -138,7 +138,7 @@ export default function FleetDetailPage({ params }) {
         key: res.key,
         amount: res.amount * 100,
         currency: res.currency,
-        name: 'Kasika Fleet',
+        name: 'Kashi Ka Fleet',
         description: `Booking for ${car.brand} ${car.name}`,
         order_id: res.orderId,
         handler: async (response) => {

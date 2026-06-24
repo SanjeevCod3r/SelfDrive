@@ -18,7 +18,7 @@ export default function FleetPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedBrands, setSelectedBrands] = useState([])
   const [selectedTypes, setSelectedTypes] = useState([])
-  const [priceRange, setPriceRange] = useState(25000)
+  const [priceRange, setPriceRange] = useState(null) // null = no upper limit (show all)
 
   // Accordion State
   const [openFilters, setOpenFilters] = useState(['brand', 'price', 'type'])
@@ -43,12 +43,19 @@ export default function FleetPage() {
     return { brands, types, brandCounts }
   }, [cars])
 
+  const maxPrice = useMemo(() => {
+    const m = Math.max(0, ...cars.map(c => Number(c.pricePerDay) || 0))
+    return m > 0 ? Math.ceil(m / 1000) * 1000 : 25000
+  }, [cars])
+
+  const effectivePrice = priceRange ?? maxPrice
+
   const filteredCars = cars.filter(c => {
-    const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          c.brand.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(c.brand)
     const matchesType = selectedTypes.length === 0 || selectedTypes.includes(c.type)
-    const matchesPrice = Number(c.pricePerDay) <= priceRange
+    const matchesPrice = Number(c.pricePerDay) <= effectivePrice
     return matchesSearch && matchesBrand && matchesType && matchesPrice
   })
 
@@ -220,20 +227,20 @@ export default function FleetPage() {
                 <FilterAccordion title="Daily Budget" isOpen={openFilters.includes('price')} onToggle={() => toggleFilter('price')}>
                   <div className="mt-6 px-1">
                     <input
-                      type="range" min="1000" max="25000" step="1000"
-                      value={priceRange}
+                      type="range" min="1000" max={maxPrice} step="1000"
+                      value={effectivePrice}
                       onChange={e => setPriceRange(Number(e.target.value))}
                       className="w-full h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-brand-500 mb-4"
                     />
                     <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
                       <span className="text-zinc-400">₹1,000</span>
-                      <span className="text-brand-500">Up to ₹{priceRange.toLocaleString()}</span>
+                      <span className="text-brand-500">Up to ₹{effectivePrice.toLocaleString()}</span>
                     </div>
                   </div>
                 </FilterAccordion>
 
                 <button
-                  onClick={() => { setSelectedBrands([]); setSelectedTypes([]); setPriceRange(25000); setSearchQuery('') }}
+                  onClick={() => { setSelectedBrands([]); setSelectedTypes([]); setPriceRange(null); setSearchQuery('') }}
                   className="w-full py-3.5 bg-charcoal-900 text-white hover:bg-brand-500 font-black uppercase tracking-widest text-[9px] rounded-xl transition-all active:scale-95"
                 >
                   Reset All Filters

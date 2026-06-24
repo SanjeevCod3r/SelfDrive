@@ -82,7 +82,7 @@ async function ensureSeed() {
     const hashed = await hashPassword('admin123')
     await db.collection('users').insertOne({
       id: uuidv4(),
-      name: 'Kasika Admin',
+      name: 'Kashi Ka Admin',
       email: 'admin@kasika.com',
       password: hashed,
       phone: '9000000000',
@@ -124,7 +124,7 @@ async function handleRoute(req, method, segments) {
   const db = await getDb()
 
   // ---- Health ----
-  if (path === '/' || path === '') return ok({ ok: true, app: 'Kasika Self Drive Car' })
+  if (path === '/' || path === '') return ok({ ok: true, app: 'Kashi Ka Self Drive Car' })
 
   // ---- Auth ----
   if (path === '/auth/signup' && method === 'POST') {

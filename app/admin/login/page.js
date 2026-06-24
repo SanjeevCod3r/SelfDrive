@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
           <Link href="/">
             <img
               src="/assests/kashika logo.png"
-              alt="Kasika Logo"
+              alt="Kashi Ka Logo"
               className="h-24 w-auto object-contain mx-auto mb-6"
             />
           </Link>

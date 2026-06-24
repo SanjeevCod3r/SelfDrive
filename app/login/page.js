@@ -45,7 +45,7 @@ export default function LoginPage() {
           <Link href="/">
             <img
               src="/assests/kashika logo.png"
-              alt="Kashika Self Drive"
+              alt="Kashi Ka Self Drive"
               className="h-16 w-auto object-contain"
             />
           </Link>
@@ -95,7 +95,7 @@ export default function LoginPage() {
             <Link href="/">
               <img
                 src="/assests/kashika logo.png"
-                alt="Kashika Self Drive"
+                alt="Kashi Ka Self Drive"
                 className="h-16 w-auto object-contain mx-auto"
               />
             </Link>
@@ -105,7 +105,7 @@ export default function LoginPage() {
           <div className="mb-8">
             <h1 className="text-3xl font-black text-charcoal-900 tracking-tight">Welcome back 👋</h1>
             <p className="text-zinc-500 text-sm font-medium mt-1">
-              Sign in to your Kashika account
+              Sign in to your Kashi Ka account
             </p>
           </div>
 
