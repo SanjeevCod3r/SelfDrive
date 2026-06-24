@@ -100,9 +100,9 @@ export default function Pricing({ showBanner = true }) {
         )}
 
         {/* Pricing Grid */}
-        <div className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto">
+        <div className="flex flex-wrap justify-center gap-6 lg:gap-7 max-w-6xl mx-auto">
           {loading ? (
-            [1,2].map(i => <div key={i} className="w-full sm:w-[380px] h-[560px] bg-white rounded-[36px] animate-pulse border border-zinc-200" />)
+            [1,2,3].map(i => <div key={i} className="w-full sm:w-[340px] lg:w-[360px] h-[560px] bg-white rounded-[36px] animate-pulse border border-zinc-200" />)
           ) : plans.map((plan, i) => {
             const featured = i === 1
             return (
@@ -112,7 +112,7 @@ export default function Pricing({ showBanner = true }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className={`group relative w-full sm:w-[380px] rounded-[36px] p-10 transition-all duration-500 flex flex-col ${
+              className={`group relative w-full sm:w-[340px] lg:w-[360px] rounded-[36px] p-8 lg:p-10 transition-all duration-500 flex flex-col ${
                 featured
                   ? 'bg-charcoal-900 border border-charcoal-900 shadow-[0_30px_70px_-20px_rgba(21,22,27,0.55)] md:-translate-y-3'
                   : 'bg-white border border-zinc-200 shadow-[0_10px_40px_-20px_rgba(21,22,27,0.15)] hover:border-amber-500/40'
