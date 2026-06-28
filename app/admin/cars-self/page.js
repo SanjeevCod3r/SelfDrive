@@ -45,6 +45,7 @@ export default function AdminSelfDriveCars() {
       ...data,
       pricePerDay: parseInt(data.pricePerDay),
       seats: parseInt(data.seats),
+      securityDeposit: data.securityDeposit ? parseInt(data.securityDeposit) : 0,
       serviceType: data.serviceType || 'self-drive',
     }
     setSaving(true)
@@ -81,6 +82,7 @@ export default function AdminSelfDriveCars() {
                 <h4 className="text-charcoal-900 font-black uppercase">{car.brand} {car.name}</h4>
                 <div className="text-zinc-500 text-xs font-bold uppercase tracking-widest">
                   {car.type} &middot; ₹{car.pricePerDay}/day &middot; {car.serviceType}
+                  {car.securityDeposit > 0 && <> &middot; Dep ₹{car.securityDeposit}</>}
                 </div>
               </div>
               <div className="flex gap-2">
@@ -121,6 +123,10 @@ export default function AdminSelfDriveCars() {
                 </select>
               </div>
               <input name="pricePerDay" type="number" defaultValue={editing?.pricePerDay} placeholder="Price Per Day (₹)" required className={inputCls} />
+              <div>
+                <input name="securityDeposit" type="number" min="0" defaultValue={editing?.securityDeposit} placeholder="Security Deposit (₹) — optional" className={inputCls} />
+                <p className="text-[10px] text-zinc-400 font-medium mt-1 ml-1">Leave blank or 0 for no security deposit on this car.</p>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <input name="seats" type="number" defaultValue={editing?.seats} placeholder="Seats" required className={inputCls} />
                 <input name="transmission" defaultValue={editing?.transmission} placeholder="Transmission" required className={inputCls} />

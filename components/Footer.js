@@ -18,7 +18,7 @@ export default function Footer() {
   if (pathname.startsWith('/admin')) return null
 
   return (
-    <footer className="bg-[#0d0f1c] relative overflow-hidden">
+    <footer className="bg-white border-t border-zinc-200 relative overflow-hidden">
 
       {/* ── Photo grid strip ── */}
       <div className="grid grid-cols-3 md:grid-cols-6 h-48 md:h-56">
@@ -30,7 +30,7 @@ export default function Footer() {
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 brightness-75 group-hover:brightness-90"
             />
             {/* overlay tint */}
-            <div className="absolute inset-0 bg-[#0d0f1c]/20 group-hover:bg-transparent transition-colors duration-500" />
+            <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors duration-500" />
           </div>
         ))}
       </div>
@@ -49,7 +49,7 @@ export default function Footer() {
               />
             </Link>
 
-            <p className="text-slate-400 text-sm leading-relaxed max-w-[240px]">
+            <p className="text-zinc-600 text-sm leading-relaxed max-w-[240px]">
               Car Is Where Early Adopters And Innovation Seekers Find Lively Imaginative Tech.
             </p>
 
@@ -58,7 +58,7 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Your Email"
-                className="w-full bg-transparent border border-slate-700 rounded-full h-12 pl-5 pr-14 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors placeholder:text-slate-600"
+                className="w-full bg-white border border-zinc-300 rounded-full h-12 pl-5 pr-14 text-charcoal-900 text-sm focus:outline-none focus:border-amber-500 transition-colors placeholder:text-zinc-400"
               />
               <button className="absolute right-1 top-1 bottom-1 w-10 bg-amber-500 rounded-full flex items-center justify-center text-white hover:bg-amber-600 transition-colors">
                 <ArrowRight className="size-4" />
@@ -68,7 +68,7 @@ export default function Footer() {
 
           {/* ── Fleet ── */}
           <div>
-            <h3 className="text-white font-black uppercase tracking-widest text-sm mb-7 flex items-center gap-2">
+            <h3 className="text-charcoal-900 font-black uppercase tracking-widest text-sm mb-7 flex items-center gap-2">
               <span className="w-5 h-0.5 bg-amber-500 inline-block" />
               Our Services
             </h3>
@@ -82,7 +82,7 @@ export default function Footer() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-slate-400 text-sm hover:text-amber-500 transition-colors flex items-center gap-2 group"
+                    className="text-zinc-600 text-sm hover:text-amber-500 transition-colors flex items-center gap-2 group"
                   >
                     <span className="w-0 group-hover:w-3 h-px bg-amber-500 transition-all duration-300 inline-block" />
                     {item.name}
@@ -94,7 +94,7 @@ export default function Footer() {
 
           {/* ── Company ── */}
           <div>
-            <h3 className="text-white font-black uppercase tracking-widest text-sm mb-7 flex items-center gap-2">
+            <h3 className="text-charcoal-900 font-black uppercase tracking-widest text-sm mb-7 flex items-center gap-2">
               <span className="w-5 h-0.5 bg-amber-500 inline-block" />
               Company
             </h3>
@@ -109,7 +109,7 @@ export default function Footer() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-slate-400 text-sm hover:text-amber-500 transition-colors flex items-center gap-2 group"
+                    className="text-zinc-600 text-sm hover:text-amber-500 transition-colors flex items-center gap-2 group"
                   >
                     <span className="w-0 group-hover:w-3 h-px bg-amber-500 transition-all duration-300 inline-block" />
                     {item.name}
@@ -121,7 +121,7 @@ export default function Footer() {
 
           {/* ── Contact ── */}
           <div>
-            <h3 className="text-white font-black uppercase tracking-widest text-sm mb-7 flex items-center gap-2">
+            <h3 className="text-charcoal-900 font-black uppercase tracking-widest text-sm mb-7 flex items-center gap-2">
               <span className="w-5 h-0.5 bg-amber-500 inline-block" />
               Contact Us
             </h3>
@@ -130,23 +130,52 @@ export default function Footer() {
                 <div className="size-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
                   <MapPin className="size-4 text-amber-500" />
                 </div>
-                <span className="text-slate-400 text-sm leading-relaxed">
-                 9X2J+X4R Varanasi, Uttar Pradesh
+                <span className="text-zinc-600 text-sm leading-relaxed">
+                  Bhubaneswar Nagar Colony, 
+                  Gate No.3,
+                  Near Electrical Orderly Bazar,<br />
+                  Varanasi, Uttar Pradesh 221002
                 </span>
               </li>
-              <li className="flex items-center gap-4">
-                <div className="size-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+              <li className="flex items-start gap-4">
+                <div className="size-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <MapPin className="size-4 text-amber-500" />
+                </div>
+                <span className="text-zinc-600 text-sm leading-relaxed">
+                  B-38/55 A23-S, Sheel Nagar,<br />
+                  Mahmoorganj, Varanasi
+                </span>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="size-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <MapPin className="size-4 text-amber-500" />
+                </div>
+                <span className="text-zinc-600 text-sm leading-relaxed">
+                  B.32/19-B-1, Nariya, Bhogabeer Road,
+                  BHU, Lanka, Varanasi
+                </span>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="size-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
                   <Phone className="size-4 text-amber-500" />
                 </div>
-                <a href="tel:+91299 33309" className="text-slate-400 text-sm hover:text-amber-500 transition-colors">
-                     + 91 91299 33309
-                </a>
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+917317893339" className="text-zinc-600 text-sm hover:text-amber-500 transition-colors">
+                    +91 73178 93339
+                  </a>
+                  <a href="tel:+917317893331" className="text-zinc-600 text-sm hover:text-amber-500 transition-colors">
+                    +91 73178 93331
+                  </a>
+                  <a href="tel:+917317893332" className="text-zinc-600 text-sm hover:text-amber-500 transition-colors">
+                    +91 73178 93332
+                  </a>
+                </div>
               </li>
               <li className="flex items-center gap-4">
                 <div className="size-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
                   <Mail className="size-4 text-amber-500" />
                 </div>
-                <a href="mailto:gorent@gmail.com" className="text-slate-400 text-sm hover:text-amber-500 transition-colors">
+                <a href="mailto:gorent@gmail.com" className="text-zinc-600 text-sm hover:text-amber-500 transition-colors">
                 kashikaselfdrive@gmail.com
                 </a>
               </li>
@@ -156,21 +185,21 @@ export default function Footer() {
       </div>
 
       {/* ── Bottom bar ── */}
-      <div className="border-t border-slate-800">
+      <div className="border-t border-zinc-200">
         <div className="container mx-auto px-6 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="size-9 bg-amber-500 rounded-lg flex items-center justify-center shadow-lg shadow-amber-500/20">
               <MessageSquare className="size-4 text-white" />
             </div>
-            <p className="text-slate-500 text-sm">
+            <p className="text-zinc-500 text-sm">
               © 2025 Kashi Ka. All Rights Reserved.
             </p>
           </div>
           <div className="flex items-center gap-6">
-            <Link href="/terms" className="text-slate-500 text-sm hover:text-amber-500 transition-colors">
+            <Link href="/terms" className="text-zinc-500 text-sm hover:text-amber-500 transition-colors">
               Terms of Service
             </Link>
-            <Link href="/privacy" className="text-slate-500 text-sm hover:text-amber-500 transition-colors">
+            <Link href="/privacy" className="text-zinc-500 text-sm hover:text-amber-500 transition-colors">
               Privacy Policy
             </Link>
           </div>

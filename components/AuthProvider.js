@@ -10,6 +10,12 @@ function AuthModal({ authModal, setAuthModal, login, signup }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Forgot-password sub-view
+  const [forgot, setForgot] = useState(false)
+  const [fpLoading, setFpLoading] = useState(false)
+  const [fpError, setFpError] = useState('')
+  const [fpDone, setFpDone] = useState(false)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
@@ -18,6 +24,27 @@ function AuthModal({ authModal, setAuthModal, login, signup }) {
     const res = authModal === 'login' ? await login(data) : await signup(data)
     setLoading(false)
     if (!res.success) setError(res.error)
+  }
+
+  const handleForgot = async (e) => {
+    e.preventDefault()
+    setFpError('')
+    setFpLoading(true)
+    const data = Object.fromEntries(new FormData(e.target))
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      const out = await res.json()
+      if (!res.ok) throw new Error(out.error || 'Reset failed')
+      setFpDone(true)
+    } catch (err) {
+      setFpError(err.message)
+    } finally {
+      setFpLoading(false)
+    }
   }
 
   const isLogin = authModal === 'login'
@@ -56,10 +83,12 @@ function AuthModal({ authModal, setAuthModal, login, signup }) {
           </div>
 
           <h2 className="text-2xl font-black text-charcoal-900 tracking-tight">
-            {isLogin ? 'Welcome Back!' : 'Create Account'}
+            {forgot ? 'Reset Password' : isLogin ? 'Welcome Back!' : 'Create Account'}
           </h2>
           <p className="text-zinc-500 text-sm font-medium mt-1">
-            {isLogin
+            {forgot
+              ? 'Verify with your registered email & phone'
+              : isLogin
               ? 'Sign in to manage your bookings'
               : 'Join Kashi Ka and start your journey'}
           </p>
@@ -75,6 +104,55 @@ function AuthModal({ authModal, setAuthModal, login, signup }) {
 
         {/* Form */}
         <div className="px-8 pb-8">
+          {forgot ? (
+            fpDone ? (
+              <div className="text-center py-2">
+                <p className="text-sm text-zinc-600 font-medium mb-6">
+                  Your password has been updated. You can now sign in with your new password.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => { setForgot(false); setFpDone(false) }}
+                  className="w-full h-12 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-black uppercase tracking-widest text-xs transition-colors"
+                >
+                  Back to Sign In
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleForgot} className="space-y-4">
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+                  <input name="email" type="email" required placeholder="Registered email"
+                    className="w-full h-12 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400" />
+                </div>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+                  <input name="phone" type="tel" required placeholder="Registered phone number"
+                    className="w-full h-12 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400" />
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+                  <input name="newPassword" type="password" required minLength={6} placeholder="New password (min 6 chars)"
+                    className="w-full h-12 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400" />
+                </div>
+
+                {fpError && (
+                  <div className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5 font-medium">{fpError}</div>
+                )}
+
+                <button type="submit" disabled={fpLoading}
+                  className="w-full h-12 bg-brand-500 hover:bg-brand-600 text-white font-black uppercase tracking-widest text-xs rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60">
+                  {fpLoading ? <span className="animate-spin size-5 border-2 border-white/30 border-t-white rounded-full" /> : <>Reset Password <ArrowRight className="size-4" /></>}
+                </button>
+
+                <button type="button" onClick={() => { setForgot(false); setFpError('') }}
+                  className="w-full text-center text-sm text-brand-600 font-black hover:underline underline-offset-4">
+                  Back to Sign In
+                </button>
+              </form>
+            )
+          ) : (
+          <>
           <form onSubmit={handleSubmit} className="space-y-4">
 
             {/* Name — signup only */}
@@ -137,7 +215,7 @@ function AuthModal({ authModal, setAuthModal, login, signup }) {
                   Password
                 </label>
                 {isLogin && (
-                  <button type="button" className="text-xs text-brand-600 font-semibold hover:underline">
+                  <button type="button" onClick={() => { setForgot(true); setFpError(''); setFpDone(false) }} className="text-xs text-brand-600 font-semibold hover:underline">
                     Forgot password?
                   </button>
                 )}
@@ -196,6 +274,8 @@ function AuthModal({ authModal, setAuthModal, login, signup }) {
               {isLogin ? 'Sign up' : 'Sign in'}
             </button>
           </p>
+          </>
+          )}
 
           {/* Trust badges */}
           <div className="flex items-center justify-center gap-4 mt-6 pt-5 border-t border-zinc-200">
@@ -284,7 +364,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout, api, openAuth: (type) => setAuthModal(type), closeAuth: () => setAuthModal(null) }}>
+    <AuthContext.Provider value={{ user, setUser, refreshUser: fetchUser, loading, login, signup, logout, api, openAuth: (type) => setAuthModal(type), closeAuth: () => setAuthModal(null) }}>
       {children}
       <AnimatePresence>
         {authModal && (

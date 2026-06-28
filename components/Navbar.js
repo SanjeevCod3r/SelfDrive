@@ -87,7 +87,7 @@ export default function Navbar() {
               </div>
               <div className="flex flex-col">
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Inquiry</span>
-                <span className="text-sm font-black tracking-tight text-slate-900">+91 91299 33309</span>
+                <span className="text-sm font-black tracking-tight text-slate-900">+91 73178 93339</span>
               </div>
             </div>
 
@@ -233,13 +233,13 @@ export default function Navbar() {
 
               {/* Footer: contact + auth */}
               <div className="border-t border-zinc-100 p-6 space-y-5">
-                <a href="tel:+919129933309" className="flex items-center gap-4">
+                <a href="tel:+917317893339" className="flex items-center gap-4">
                   <div className="flex size-11 items-center justify-center rounded-2xl bg-amber-500 text-white shrink-0">
                     <PhoneCall className="size-5" />
                   </div>
                   <div>
                     <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Direct Support</p>
-                    <p className="text-base font-black tracking-tight text-charcoal-900">+91 91299 33309</p>
+                    <p className="text-base font-black tracking-tight text-charcoal-900">+91 73178 93339</p>
                   </div>
                 </a>
 

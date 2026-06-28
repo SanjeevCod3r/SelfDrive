@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/components/AuthProvider'
 import { format } from 'date-fns'
-import { Car, User, MapPin } from 'lucide-react'
+import { Car, User, MapPin, Phone, Clock, CalendarDays } from 'lucide-react'
 
 export default function DriverBookings() {
   const { api } = useAuth()
@@ -60,14 +60,34 @@ export default function DriverBookings() {
                       <span className="text-charcoal-900 font-bold text-sm">{booking.userName}</span>
                     </div>
                     <div className="text-zinc-500 text-xs">{booking.userEmail}</div>
+                    {booking.userPhone && (
+                      <div className="flex items-center gap-1.5 text-zinc-500 text-xs mt-1">
+                        <Phone className="size-3 text-zinc-400" />
+                        <a href={`tel:${booking.userPhone}`} className="hover:text-brand-600 transition-colors">{booking.userPhone}</a>
+                      </div>
+                    )}
                   </td>
                   <td className="p-6">
                     <div className="text-charcoal-900 font-bold text-sm">{booking.carName}</div>
-                    <div className="text-brand-600 text-xs font-black uppercase tracking-widest mt-1">₹{booking.finalAmount}</div>
+                    <div className="text-brand-600 text-sm font-black mt-1">₹{(booking.finalAmount || 0).toLocaleString('en-IN')}</div>
+                    <div className="mt-2 space-y-0.5 text-[10px] font-medium text-zinc-500">
+                      <div>Base: ₹{(booking.baseAmount || 0).toLocaleString('en-IN')}</div>
+                      {booking.gst > 0 && <div>GST (18%): ₹{(booking.gst || 0).toLocaleString('en-IN')}</div>}
+                    </div>
                   </td>
                   <td className="p-6 text-sm text-zinc-600">
+                    {booking.months > 0 && (
+                      <div className="inline-flex items-center gap-1.5 mb-2 text-[10px] font-black uppercase tracking-widest text-brand-600 bg-brand-500/10 px-2.5 py-1 rounded-full">
+                        <CalendarDays className="size-3" /> {booking.months} {booking.months === 1 ? 'Month' : 'Months'}
+                      </div>
+                    )}
                     <div>{format(new Date(booking.startDate), 'MMM dd, yyyy')}</div>
                     <div className="text-zinc-500 text-xs mt-1">to {format(new Date(booking.endDate), 'MMM dd, yyyy')}</div>
+                    {booking.pickupTime && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 mt-2">
+                        <Clock className="size-3 text-brand-500" /> Pickup {booking.pickupTime}
+                      </div>
+                    )}
                   </td>
                   <td className="p-6 max-w-xs">
                     <div className="flex items-start gap-2 mb-2">

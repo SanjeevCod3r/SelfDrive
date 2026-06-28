@@ -3,21 +3,43 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/AuthProvider'
 import { motion } from 'framer-motion'
-import { 
-  User, Award, Car, Calendar, CreditCard, Settings, 
+import {
+  User, Award, Car, Calendar, CreditCard, Settings,
   LogOut, MapPin, Clock, ArrowRight, Zap , Crown
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { toast } from 'sonner'
 
 const fmtINR = (n) => `₹${(n || 0).toLocaleString('en-IN')}`
 
 export default function Dashboard() {
-  const { user, loading: authLoading, logout, api } = useAuth()
+  const { user, setUser, loading: authLoading, logout, api } = useAuth()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState('bookings')
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
+
+  // Profile settings form
+  const [profile, setProfile] = useState({ name: '', phone: '' })
+  const [savingProfile, setSavingProfile] = useState(false)
+
+  useEffect(() => {
+    if (user) setProfile({ name: user.name || '', phone: user.phone || '' })
+  }, [user])
+
+  const saveProfile = async () => {
+    setSavingProfile(true)
+    try {
+      const data = await api('/auth/me', { method: 'PUT', body: JSON.stringify(profile) })
+      if (data.user) setUser(data.user)
+      toast.success('Profile updated successfully')
+    } catch (e) {
+      toast.error(e.message || 'Failed to update profile')
+    } finally {
+      setSavingProfile(false)
+    }
+  }
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -217,14 +239,33 @@ export default function Dashboard() {
                   <div className="space-y-4">
                     <div>
                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2 block">Full Name</label>
-                      <input type="text" defaultValue={user.name} className="w-full bg-white border border-zinc-200 rounded-xl h-12 px-4 text-charcoal-900 focus:outline-none focus:border-brand-500 transition-colors" />
+                      <input
+                        type="text"
+                        value={profile.name}
+                        onChange={e => setProfile(p => ({ ...p, name: e.target.value }))}
+                        className="w-full bg-white border border-zinc-200 rounded-xl h-12 px-4 text-charcoal-900 focus:outline-none focus:border-brand-500 transition-colors"
+                      />
                     </div>
                     <div>
                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2 block">Email Address</label>
                       <input type="email" defaultValue={user.email} disabled className="w-full bg-zinc-100 border border-zinc-200 rounded-xl h-12 px-4 text-zinc-500 cursor-not-allowed" />
                     </div>
-                    <Button className="mt-4 bg-brand-500 text-white font-black uppercase tracking-widest text-xs h-12 px-8 rounded-xl hover:bg-brand-600 transition-colors">
-                      Save Changes
+                    <div>
+                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2 block">Phone Number</label>
+                      <input
+                        type="tel"
+                        value={profile.phone}
+                        onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))}
+                        placeholder="+91 98765 43210"
+                        className="w-full bg-white border border-zinc-200 rounded-xl h-12 px-4 text-charcoal-900 focus:outline-none focus:border-brand-500 transition-colors placeholder:text-zinc-400"
+                      />
+                    </div>
+                    <Button
+                      onClick={saveProfile}
+                      disabled={savingProfile}
+                      className="mt-4 bg-brand-500 text-white font-black uppercase tracking-widest text-xs h-12 px-8 rounded-xl hover:bg-brand-600 transition-colors disabled:opacity-50"
+                    >
+                      {savingProfile ? 'Saving...' : 'Save Changes'}
                     </Button>
                   </div>
                 </div>

@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   LayoutDashboard, Car, Users, Ticket, FileText,
-  Calendar, LogOut, Eye, EyeOff, Shield, ChevronRight
+  Calendar, LogOut, Eye, EyeOff, Shield, ChevronRight, Mail, ShieldCheck
 } from 'lucide-react'
 
 // ─── Admin Auth Hook (completely separate from website auth) ─────────────────
@@ -256,8 +256,10 @@ export default function AdminLayout({ children }) {
     { href: '/admin/cars-driver', label: 'Fleet Cars', icon: Car },
     { href: '/admin/packages', label: 'Subscription Plans', icon: Ticket },
     { href: '/admin/users', label: 'Manage Users', icon: Users },
+    { href: '/admin/kyc', label: 'KYC Verifications', icon: ShieldCheck },
     { href: '/admin/coupons', label: 'Coupons', icon: Ticket },
     { href: '/admin/blogs', label: 'Blogs', icon: FileText },
+    { href: '/admin/contacts', label: 'Contact Messages', icon: Mail },
   ]
 
   // Loading state

@@ -16,12 +16,11 @@ export default function FleetDetailPage({ params }) {
   const [car, setCar] = useState(null)
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const [months, setMonths] = useState('1')
+  const [pickupTime, setPickupTime] = useState('10:00')
   const [bookingLoading, setBookingLoading] = useState(false)
   const [pickup, setPickup] = useState('')
   const [drop, setDrop] = useState('')
-  const [passengers, setPassengers] = useState('1')
-  const [instructions, setInstructions] = useState('')
   const [distance, setDistance] = useState(0)
   const [distanceLoading, setDistanceLoading] = useState(false)
   const [usePoints, setUsePoints] = useState(false)
@@ -39,13 +38,15 @@ export default function FleetDetailPage({ params }) {
     }).catch(() => setLoading(false))
   }, [params.id, api])
 
-  const days = startDate && endDate ? Math.max(1, Math.ceil((new Date(endDate) - new Date(startDate)) / 86400000)) : 0
-  const baseAmount = car ? days * car.pricePerDay : 0
-  const distanceCharge = distance * 20
-  const totalBeforeDiscount = baseAmount + distanceCharge
-  const pointsDiscount = usePoints ? Math.min(user?.points || 0, totalBeforeDiscount) : 0
-  const premiumDiscount = user?.isPremium ? Math.floor((totalBeforeDiscount - pointsDiscount) * 0.05) : 0
-  const finalAmount = Math.max(0, totalBeforeDiscount - premiumDiscount - pointsDiscount)
+  // Monthly billing — the fleet car's stored price is its monthly price
+  const monthsNum = Math.max(1, parseInt(months) || 1)
+  const monthlyRate = car ? (Number(car.monthlyPrice) || Number(car.pricePerDay) || 0) : 0
+  const baseAmount = monthsNum * monthlyRate
+  const pointsDiscount = usePoints ? Math.min(user?.points || 0, baseAmount) : 0
+  const premiumDiscount = user?.isPremium ? Math.floor((baseAmount - pointsDiscount) * 0.05) : 0
+  const taxableAmount = Math.max(0, baseAmount - premiumDiscount - pointsDiscount)
+  const gst = Math.round(taxableAmount * 0.18)
+  const finalAmount = Math.max(0, taxableAmount + gst)
 
   const initMap = () => {
     if (!window.google) return
@@ -108,11 +109,11 @@ export default function FleetDetailPage({ params }) {
 
   const handleBooking = async () => {
     if (!user) {
-      toast.error('Please login to book your chauffeur-driven car')
+      toast.error('Please login to book this car')
       return
     }
-    if (!startDate || !endDate || !pickup || !drop) {
-      toast.error('Please fill in all details including locations')
+    if (!startDate || !pickupTime || !pickup || !drop) {
+      toast.error('Please fill start date, pickup time and locations')
       return
     }
     setBookingLoading(true)
@@ -122,14 +123,12 @@ export default function FleetDetailPage({ params }) {
         body: JSON.stringify({
           carId: car.id,
           startDate,
-          endDate,
+          months: monthsNum,
+          pickupTime,
           bookingType: 'with-driver',
           pickupLocation: pickup,
           dropLocation: drop,
-          passengers,
-          instructions,
           distance,
-          distanceCharge,
           usePoints
         })
       })
@@ -150,7 +149,7 @@ export default function FleetDetailPage({ params }) {
                 bookingId: res.bookingId
               })
             })
-            toast.success('Professional chauffeur booking confirmed!')
+            toast.success('Monthly booking confirmed!')
             window.location.href = '/dashboard'
           } catch (e) {
             toast.error('Verification failed')
@@ -212,7 +211,7 @@ export default function FleetDetailPage({ params }) {
 
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-1.5 backdrop-blur-md">
                 <Crown className="size-3.5 text-brand-500" />
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-400">Elite Chauffeur Collection</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-400">Monthly Rental Collection</span>
               </div>
 
               <h1 className="mb-8 text-5xl font-black uppercase leading-[0.85] tracking-tighter text-white md:text-8xl">
@@ -226,8 +225,8 @@ export default function FleetDetailPage({ params }) {
                     <Crown className="size-5 text-brand-500" />
                   </div>
                   <div>
-                    <p className="mb-1 text-[8px] font-black uppercase leading-none tracking-widest text-zinc-400">Service Class</p>
-                    <p className="text-xl font-black uppercase tracking-tight text-white">First Class</p>
+                    <p className="mb-1 text-[8px] font-black uppercase leading-none tracking-widest text-zinc-400">Plan Type</p>
+                    <p className="text-xl font-black uppercase tracking-tight text-white">Monthly Rental</p>
                   </div>
                 </div>
 
@@ -238,8 +237,8 @@ export default function FleetDetailPage({ params }) {
                     <ShieldCheck className="size-5 text-brand-500" />
                   </div>
                   <div>
-                    <p className="mb-1 text-[8px] font-black uppercase leading-none tracking-widest text-zinc-400">Chauffeur Status</p>
-                    <p className="text-xl font-black uppercase tracking-tight text-white">Verified Expert</p>
+                    <p className="mb-1 text-[8px] font-black uppercase leading-none tracking-widest text-zinc-400">Billing</p>
+                    <p className="text-xl font-black uppercase tracking-tight text-white">Per Month</p>
                   </div>
                 </div>
               </div>
@@ -276,20 +275,20 @@ export default function FleetDetailPage({ params }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                <div className="bg-white border border-zinc-200 p-8 rounded-[28px] flex gap-6 shadow-[0_10px_40px_-15px_rgba(21,22,27,0.12)]">
                  <div className="size-14 rounded-2xl bg-brand-500/10 flex items-center justify-center shrink-0 border border-brand-500/20">
-                   <ShieldCheck className="size-7 text-brand-500" />
+                   <Calendar className="size-7 text-brand-500" />
                  </div>
                  <div>
-                   <h4 className="text-lg font-black uppercase tracking-tight mb-2 text-charcoal-900">Verified Drivers</h4>
-                   <p className="text-zinc-600 text-sm leading-relaxed">Background checked, professional chauffeurs with minimum 5+ years experience.</p>
+                   <h4 className="text-lg font-black uppercase tracking-tight mb-2 text-charcoal-900">Flexible Monthly Plans</h4>
+                   <p className="text-zinc-600 text-sm leading-relaxed">Book this car for as many months as you need — simple, transparent monthly pricing.</p>
                  </div>
                </div>
                <div className="bg-white border border-zinc-200 p-8 rounded-[28px] flex gap-6 shadow-[0_10px_40px_-15px_rgba(21,22,27,0.12)]">
                  <div className="size-14 rounded-2xl bg-brand-500/10 flex items-center justify-center shrink-0 border border-brand-500/20">
-                   <Clock className="size-7 text-brand-500" />
+                   <ShieldCheck className="size-7 text-brand-500" />
                  </div>
                  <div>
-                   <h4 className="text-lg font-black uppercase tracking-tight mb-2 text-charcoal-900">Punctual Promise</h4>
-                   <p className="text-zinc-600 text-sm leading-relaxed">Your driver will arrive 15 minutes prior to the scheduled pickup time.</p>
+                   <h4 className="text-lg font-black uppercase tracking-tight mb-2 text-charcoal-900">Maintenance Included</h4>
+                   <p className="text-zinc-600 text-sm leading-relaxed">Every monthly rental includes servicing and upkeep, so the car stays in pristine condition.</p>
                  </div>
                </div>
             </div>
@@ -349,11 +348,11 @@ export default function FleetDetailPage({ params }) {
             <div className="bg-white border border-zinc-200 rounded-[32px] p-10 sticky top-32 shadow-[0_10px_40px_-15px_rgba(21,22,27,0.12)]">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Full-Day Service</p>
-                  <h3 className="text-3xl font-black text-charcoal-900 uppercase tracking-tight">₹{car.pricePerDay?.toLocaleString()}</h3>
+                  <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Monthly Rental Plan</p>
+                  <h3 className="text-3xl font-black text-charcoal-900 uppercase tracking-tight">{fmtINR(monthlyRate)}<span className="text-sm text-zinc-500">/mo</span></h3>
                 </div>
                 <div className="bg-brand-500/10 border border-brand-500/20 px-3 py-1.5 rounded-xl text-brand-600 text-[10px] font-black uppercase tracking-widest">
-                  Driver Included
+                  Monthly Plan
                 </div>
               </div>
 
@@ -363,21 +362,34 @@ export default function FleetDetailPage({ params }) {
                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Journey Start</label>
                      <div className="relative">
                        <Calendar className="size-4 absolute left-4 top-1/2 -translate-y-1/2 text-brand-500 pointer-events-none" />
-                       <input 
+                       <input
                          type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
                          className="w-full bg-white border border-zinc-200 h-14 rounded-2xl pl-12 pr-4 text-xs font-bold text-charcoal-900 focus:border-brand-500 transition-all outline-none"
                        />
                      </div>
                    </div>
                    <div className="space-y-2">
-                     <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Return Trip</label>
+                     <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Pickup Time</label>
                      <div className="relative">
-                       <Calendar className="size-4 absolute left-4 top-1/2 -translate-y-1/2 text-brand-500 pointer-events-none" />
-                       <input 
-                         type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
+                       <Clock className="size-4 absolute left-4 top-1/2 -translate-y-1/2 text-brand-500 pointer-events-none" />
+                       <input
+                         type="time" value={pickupTime} onChange={e => setPickupTime(e.target.value)}
                          className="w-full bg-white border border-zinc-200 h-14 rounded-2xl pl-12 pr-4 text-xs font-bold text-charcoal-900 focus:border-brand-500 transition-all outline-none"
                        />
                      </div>
+                   </div>
+                 </div>
+
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Booking Duration (Months)</label>
+                   <div className="relative">
+                     <Calendar className="size-4 absolute left-4 top-1/2 -translate-y-1/2 text-brand-500 pointer-events-none" />
+                     <select
+                       value={months} onChange={e => setMonths(e.target.value)}
+                       className="w-full bg-white border border-zinc-200 h-14 rounded-2xl pl-12 pr-4 text-xs font-bold text-charcoal-900 focus:border-brand-500 transition-all outline-none appearance-none"
+                     >
+                       {[1,2,3,4,5,6,9,12].map(n => <option key={n} value={n}>{n} {n === 1 ? 'Month' : 'Months'}</option>)}
+                     </select>
                    </div>
                  </div>
 
@@ -415,26 +427,6 @@ export default function FleetDetailPage({ params }) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Passengers</label>
-                    <select 
-                      value={passengers} onChange={e => setPassengers(e.target.value)}
-                      className="w-full bg-white border border-zinc-200 h-14 rounded-2xl px-5 text-xs font-bold text-charcoal-900 focus:border-brand-500 transition-all outline-none appearance-none"
-                    >
-                      {[1,2,3,4,5,6,7].map(n => <option key={n} value={n}>{n} Pax</option>)}
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Special Req.</label>
-                    <input 
-                      type="text" value={instructions} onChange={e => setInstructions(e.target.value)}
-                      placeholder="Extra luggage etc."
-                      className="w-full bg-white border border-zinc-200 h-14 rounded-2xl px-5 text-xs font-bold text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 transition-all outline-none"
-                    />
-                  </div>
-                </div>
-
                 {/* Redeem Points */}
                 {(user?.points > 0) && (
                     <label className="flex items-center gap-4 bg-brand-500/5 border border-brand-500/20 p-4 rounded-2xl cursor-pointer group hover:bg-brand-500/10 transition-all">
@@ -450,28 +442,13 @@ export default function FleetDetailPage({ params }) {
                  )}
 
                 <div className="pt-6 space-y-4">
-                   <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest">
-                     <span className="text-zinc-500">Service Fee</span>
-                     <span className="text-charcoal-900">Included</span>
-                   </div>
-                   <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest">
-                     <span className="text-zinc-500">Chauffeur Charges</span>
-                     <span className="text-charcoal-900">Included</span>
-                   </div>
 
-                   {days > 0 && (
+                   {baseAmount > 0 && (
                      <div className="space-y-4 pt-4 border-t border-zinc-200">
                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-500">
-                          <span>Base Amount ({days} Days)</span>
+                          <span>Base ({monthsNum} {monthsNum === 1 ? 'Month' : 'Months'} × {fmtINR(monthlyRate)})</span>
                           <span className="text-charcoal-900">{fmtINR(baseAmount)}</span>
                         </div>
-
-                        {distance > 0 && (
-                          <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-500">
-                            <span>Distance ({distance} km)</span>
-                            <span className="text-charcoal-900">{fmtINR(distanceCharge)}</span>
-                          </div>
-                        )}
 
                         {user?.isPremium && (
                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-brand-600">
@@ -489,6 +466,11 @@ export default function FleetDetailPage({ params }) {
                            </div>
                          )}
 
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                          <span>GST (18%)</span>
+                          <span className="text-charcoal-900">{fmtINR(gst)}</span>
+                        </div>
+
                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest pt-4 border-t border-zinc-200">
                           <span className="text-zinc-500">Total Amount</span>
                           <span className="text-3xl font-black text-brand-500 tracking-tighter leading-none">{fmtINR(finalAmount)}</span>
@@ -502,7 +484,7 @@ export default function FleetDetailPage({ params }) {
                     disabled={bookingLoading}
                     className="w-full bg-brand-500 hover:bg-brand-600 h-16 rounded-[24px] text-white font-black uppercase tracking-[0.2em] text-xs transition-all shadow-xl shadow-brand-500/10 active:scale-95 disabled:opacity-50"
                   >
-                    {bookingLoading ? 'Securing Chauffeur...' : 'Confirm Fleet Booking'}
+                    {bookingLoading ? 'Processing...' : 'Confirm Monthly Booking'}
                   </button>
                 </div>
               </div>

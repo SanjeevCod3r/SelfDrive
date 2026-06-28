@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Shield, CheckCircle } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Shield, CheckCircle, Phone, X, KeyRound } from 'lucide-react'
 import { useAuth } from '@/components/AuthProvider'
 
 export default function LoginPage() {
@@ -13,6 +13,33 @@ export default function LoginPage() {
   const [showPwd, setShowPwd] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Forgot-password modal state
+  const [forgotOpen, setForgotOpen] = useState(false)
+  const [fpLoading, setFpLoading] = useState(false)
+  const [fpError, setFpError] = useState('')
+  const [fpDone, setFpDone] = useState(false)
+
+  const handleForgot = async (e) => {
+    e.preventDefault()
+    setFpError('')
+    setFpLoading(true)
+    const data = Object.fromEntries(new FormData(e.target))
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      const out = await res.json()
+      if (!res.ok) throw new Error(out.error || 'Reset failed')
+      setFpDone(true)
+    } catch (err) {
+      setFpError(err.message)
+    } finally {
+      setFpLoading(false)
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -136,7 +163,11 @@ export default function LoginPage() {
                 <label className="text-xs font-bold text-charcoal-900 uppercase tracking-widest">
                   Password
                 </label>
-                <button type="button" className="text-xs font-semibold text-brand-600 hover:text-brand-700">
+                <button
+                  type="button"
+                  onClick={() => { setForgotOpen(true); setFpError(''); setFpDone(false) }}
+                  className="text-xs font-semibold text-brand-600 hover:text-brand-700"
+                >
                   Forgot password?
                 </button>
               </div>
@@ -208,6 +239,72 @@ export default function LoginPage() {
           </div>
         </motion.div>
       </div>
+
+      {/* ── Forgot password modal ── */}
+      {forgotOpen && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-charcoal-950/60 backdrop-blur-md" onClick={() => setForgotOpen(false)} />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="relative z-10 w-full max-w-md bg-white border border-zinc-200 rounded-3xl p-8 shadow-2xl"
+          >
+            <button onClick={() => setForgotOpen(false)} className="absolute top-5 right-5 size-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center transition-colors">
+              <X className="size-4 text-charcoal-900" />
+            </button>
+
+            {fpDone ? (
+              <div className="text-center py-4">
+                <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-green-100 text-green-600">
+                  <CheckCircle className="size-7" />
+                </div>
+                <h3 className="text-xl font-black text-charcoal-900 uppercase tracking-tight mb-2">Password Reset</h3>
+                <p className="text-zinc-500 text-sm font-medium mb-6">Your password has been updated. You can now sign in with your new password.</p>
+                <button onClick={() => setForgotOpen(false)} className="w-full h-12 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-black uppercase tracking-widest text-xs transition-colors">
+                  Back to Sign In
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="mb-6">
+                  <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-500">
+                    <KeyRound className="size-6" />
+                  </div>
+                  <h3 className="text-xl font-black text-charcoal-900 uppercase tracking-tight">Reset Password</h3>
+                  <p className="text-zinc-500 text-sm font-medium mt-1">Verify with your registered email & phone to set a new password.</p>
+                </div>
+
+                <form onSubmit={handleForgot} className="space-y-4">
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+                    <input name="email" type="email" required placeholder="Registered email"
+                      className="w-full h-12 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400" />
+                  </div>
+                  <div className="relative">
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+                    <input name="phone" type="tel" required placeholder="Registered phone number"
+                      className="w-full h-12 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400" />
+                  </div>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+                    <input name="newPassword" type="password" required minLength={6} placeholder="New password (min 6 chars)"
+                      className="w-full h-12 pl-11 pr-4 rounded-xl border border-zinc-200 bg-white text-charcoal-900 text-sm font-medium outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400" />
+                  </div>
+
+                  {fpError && (
+                    <div className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3 font-medium">{fpError}</div>
+                  )}
+
+                  <button type="submit" disabled={fpLoading}
+                    className="w-full h-12 bg-brand-500 hover:bg-brand-600 text-white font-black uppercase tracking-widest text-xs rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60">
+                    {fpLoading ? <span className="size-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <>Reset Password <ArrowRight className="size-4" /></>}
+                  </button>
+                </form>
+              </>
+            )}
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }

@@ -15,8 +15,7 @@ const SLIDES = [
     // price: '₹7,999/day',
   },
   {
-    // src: '/assests/white_suv_hero.png',
-    src: '/assests/yellow_car_hero1.png',
+    src: '/assests/white_suv.png',
     // name: 'Toyota Highlander',
     // tag: 'Premium SUV',
     // price: '₹4,999/day',
@@ -24,6 +23,11 @@ const SLIDES = [
   {
     // src: '/assests/yellow_car_hero.png',
     src: '/assests/white_suv.png',
+    // name: 'Audi R8',
+    // tag: 'Sports Car',
+    // price: '₹14,999/day',
+
+    src: '/assests/bmw_x6_hero.png',
     // name: 'Audi R8',
     // tag: 'Sports Car',
     // price: '₹14,999/day',

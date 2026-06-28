@@ -8,6 +8,7 @@ export const metadata = {
 
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import WhatsAppWidget from '@/components/WhatsAppWidget'
 import { AuthProvider } from '@/components/AuthProvider'
 
 export default function RootLayout({ children }) {
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
             {children}
           </main>
           <Footer />
+          <WhatsAppWidget />
           <Toaster richColors position="top-right" />
         </AuthProvider>
       </body>

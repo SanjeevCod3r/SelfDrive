@@ -20,16 +20,28 @@ export default function ContactPage() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false)
+
+    try {
+      // Save the submission so it shows up in the admin panel
+      const res = await fetch('/api/contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to send message')
+
       setSuccess(true)
       toast.success('Message sent! Our team will reach out shortly.')
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
-    }, 1500)
+    } catch (error) {
+      toast.error(error.message || 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -92,10 +104,13 @@ export default function ContactPage() {
               <h3 className="text-2xl font-black uppercase tracking-tight mb-10 text-charcoal-900">Reach Out</h3>
 
               <div className="space-y-10">
+                
                 {[
-                  { icon: MapPin, label: 'Location', lines: ['Sigra, Varanasi', 'Uttar Pradesh 221010'] },
-                  { icon: Phone, label: 'Direct Line', lines: ['+91 98765 43210', '+91 88765 43210'] },
-                  { icon: Mail, label: 'Official Email', lines: ['support@kasika.com', 'fleet@kasika.com'] },
+                  { icon: MapPin, label: 'Main Branch', lines: ['Bhubaneswar Nagar Colony, Gate No. 3,', 'Near Electrical Orderly Bazar, Varanasi, UP 221002'] },
+                  { icon: MapPin, label: 'Sheel Nagar Branch', lines: ['B-38/55 A23-S, Sheel Nagar,', 'Mahmoorganj, Varanasi'] },
+                  { icon: MapPin, label: 'BHU / Lanka Branch', lines: ['B.32/19-B-1, Nariya, Bhogabeer Road,', 'BHU, Lanka, Varanasi'] },
+                  { icon: Phone, label: 'Direct Line', lines: ['+91 73178 93339', '+91 73178 93331', '+91 73178 93332'] },
+                  { icon: Mail, label: 'Official Email', lines: ['kashikaselfdrive@gmail.com'] },
                 ].map((info, idx) => (
                   <div key={idx} className="flex gap-6 group">
                     <div className="size-14 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-center shrink-0 text-amber-500 transition-all group-hover:bg-amber-500 group-hover:text-white group-hover:scale-105">
@@ -104,7 +119,9 @@ export default function ContactPage() {
                     <div>
                       <h4 className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">{info.label}</h4>
                       <p className="text-charcoal-900 font-bold leading-relaxed">
-                        {info.lines[0]}<br />{info.lines[1]}
+                        {info.lines.map((line, i) => (
+                          <span key={i}>{line}{i < info.lines.length - 1 && <br />}</span>
+                        ))}
                       </p>
                     </div>
                   </div>
@@ -169,7 +186,7 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  <button 
+                  <button
                     type="submit" disabled={loading}
                     className="h-16 px-12 bg-brand-500 text-white hover:bg-brand-600 rounded-2xl transition-all font-black uppercase tracking-widest text-xs flex items-center gap-3 shadow-xl shadow-amber-500/10 active:scale-95 disabled:opacity-50"
                   >

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/components/AuthProvider'
 import { format } from 'date-fns'
-import { Calendar, User, FileText, CheckCircle2 } from 'lucide-react'
+import { Calendar, User, FileText, CheckCircle2, Phone, Clock, MapPin, CreditCard, Truck, Store } from 'lucide-react'
 
 export default function SelfDriveBookings() {
   const { api } = useAuth()
@@ -60,14 +60,50 @@ export default function SelfDriveBookings() {
                       <span className="text-charcoal-900 font-bold text-sm">{booking.userName}</span>
                     </div>
                     <div className="text-zinc-500 text-xs">{booking.userEmail}</div>
+                    {booking.userPhone && (
+                      <div className="flex items-center gap-1.5 text-zinc-500 text-xs mt-1">
+                        <Phone className="size-3 text-zinc-400" />
+                        <a href={`tel:${booking.userPhone}`} className="hover:text-brand-600 transition-colors">{booking.userPhone}</a>
+                      </div>
+                    )}
                   </td>
                   <td className="p-6">
                     <div className="text-charcoal-900 font-bold text-sm">{booking.carName}</div>
-                    <div className="text-brand-600 text-xs font-black uppercase tracking-widest mt-1">₹{booking.finalAmount}</div>
+                    <div className="text-brand-600 text-sm font-black mt-1">₹{(booking.finalAmount || 0).toLocaleString('en-IN')}</div>
+                    <div className="mt-2 space-y-0.5 text-[10px] font-medium text-zinc-500">
+                      <div>Base: ₹{(booking.baseAmount || 0).toLocaleString('en-IN')}</div>
+                      {booking.deliveryCharge > 0 && <div>Delivery: ₹{booking.deliveryCharge}</div>}
+                      {booking.gst > 0 && <div>GST (18%): ₹{(booking.gst || 0).toLocaleString('en-IN')}</div>}
+                      {booking.securityDeposit > 0 && <div className="text-amber-600">Deposit: ₹{(booking.securityDeposit || 0).toLocaleString('en-IN')}</div>}
+                    </div>
                   </td>
                   <td className="p-6 text-sm text-zinc-600">
                     <div>{format(new Date(booking.startDate), 'MMM dd, yyyy')}</div>
                     <div className="text-zinc-500 text-xs mt-1">to {format(new Date(booking.endDate), 'MMM dd, yyyy')}</div>
+                    {(booking.pickupTime || booking.returnTime) && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 mt-2">
+                        <Clock className="size-3 text-amber-500" /> {booking.pickupTime || '--'} → {booking.returnTime || '--'}
+                      </div>
+                    )}
+                    <div className="mt-2">
+                      {booking.pickupMethod === 'delivery' ? (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600"><Truck className="size-3" /> Home Delivery</span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-zinc-600"><Store className="size-3 text-zinc-500" /> Store Pickup</span>
+                      )}
+                    </div>
+                    {booking.pickupLocation && (
+                      <div className="flex items-start gap-1.5 text-[10px] text-zinc-600 mt-2 max-w-[200px]">
+                        <MapPin className="size-3 text-amber-500 shrink-0 mt-0.5" />
+                        <span><span className="font-black uppercase tracking-widest text-zinc-400">Pickup:</span> {booking.pickupLocation}</span>
+                      </div>
+                    )}
+                    {booking.dropLocation && (
+                      <div className="flex items-start gap-1.5 text-[10px] text-zinc-600 mt-1 max-w-[200px]">
+                        <MapPin className="size-3 text-green-600 shrink-0 mt-0.5" />
+                        <span><span className="font-black uppercase tracking-widest text-zinc-400">Drop:</span> {booking.dropLocation}</span>
+                      </div>
+                    )}
                   </td>
                   <td className="p-6">
                     <div className="flex items-center gap-2 mb-1">
@@ -75,9 +111,16 @@ export default function SelfDriveBookings() {
                       <span className="text-zinc-600 text-sm font-mono">{booking.driverLicense}</span>
                     </div>
                     {booking.ageVerified && (
-                      <div className="flex items-center gap-1 text-[10px] text-green-700 font-bold uppercase tracking-widest">
+                      <div className="flex items-center gap-1 text-[10px] text-green-700 font-bold uppercase tracking-widest mb-2">
                         <CheckCircle2 className="size-3" /> Age 21+ Verified
                       </div>
+                    )}
+                    {booking.panCardImage ? (
+                      <a href={booking.panCardImage} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-brand-600 hover:underline">
+                        <CreditCard className="size-3" /> View PAN Card
+                      </a>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-zinc-400"><CreditCard className="size-3" /> No PAN</span>
                     )}
                   </td>
                   <td className="p-6">

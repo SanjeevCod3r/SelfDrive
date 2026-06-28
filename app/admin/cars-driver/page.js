@@ -85,7 +85,7 @@ export default function AdminFleetCars() {
               <div className="flex-1">
                 <h4 className="text-charcoal-900 font-black uppercase">{car.brand} {car.name}</h4>
                 <div className="text-zinc-500 text-xs font-bold uppercase tracking-widest">
-                  {car.type} &middot; ₹{car.pricePerDay}/day &middot; {car.serviceType}
+                  {car.type} &middot; ₹{car.pricePerDay}/mo &middot; {car.serviceType}
                 </div>
               </div>
               <div className="flex gap-2">
@@ -124,7 +124,7 @@ export default function AdminFleetCars() {
                   <option value="both">Both Services</option>
                 </select>
               </div>
-              <input name="pricePerDay" type="number" defaultValue={editing?.pricePerDay} placeholder="Price Per Day (₹)" required className={inputCls} />
+              <input name="pricePerDay" type="number" defaultValue={editing?.pricePerDay} placeholder="Monthly Price (₹)" required className={inputCls} />
               <div className="grid grid-cols-2 gap-4">
                 <input name="seats" type="number" defaultValue={editing?.seats} placeholder="Seats" required className={inputCls} />
                 <input name="transmission" defaultValue={editing?.transmission} placeholder="Transmission" required className={inputCls} />

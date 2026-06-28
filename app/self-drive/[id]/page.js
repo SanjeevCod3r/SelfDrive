@@ -33,11 +33,53 @@ export default function SelfDriveDetail() {
   const [ageVerified, setAgeVerified] = useState(false)
   const [usePoints, setUsePoints] = useState(false)
   const [deliveryAddress, setDeliveryAddress] = useState('')
+  const [pickupLocation, setPickupLocation] = useState('')
+  const [dropLocation, setDropLocation] = useState('')
+
+  // New: time, pickup method, PAN upload
+  const [pickupTime, setPickupTime] = useState('10:00')
+  const [returnTime, setReturnTime] = useState('10:00')
+  const [pickupMethod, setPickupMethod] = useState('self') // 'self' = store pickup, 'delivery' = home delivery
+  const [panCardImage, setPanCardImage] = useState('')
+  const [panUploading, setPanUploading] = useState(false)
+
+  const handlePanUpload = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 5 * 1024 * 1024) { toast.error('Image must be under 5MB'); return }
+    setPanUploading(true)
+    try {
+      const dataUri = await new Promise((res, rej) => {
+        const r = new FileReader()
+        r.onload = () => res(r.result)
+        r.onerror = rej
+        r.readAsDataURL(file)
+      })
+      const out = await api('/upload', { method: 'POST', body: JSON.stringify({ image: dataUri, folder: 'kashika/pan' }) })
+      setPanCardImage(out.url)
+      toast.success('PAN card uploaded')
+    } catch (err) {
+      toast.error(err.message || 'Upload failed')
+    } finally {
+      setPanUploading(false)
+    }
+  }
 
   useEffect(() => {
+    if (loading) return
+    // Attach Google Places autocomplete once the Maps script is ready.
+    // The script loads async, so poll until window.google is available.
     if (window.google) {
       initMap()
+      return
     }
+    const timer = setInterval(() => {
+      if (window.google) {
+        initMap()
+        clearInterval(timer)
+      }
+    }, 500)
+    return () => clearInterval(timer)
   }, [loading])
 
   useEffect(() => {
@@ -52,22 +94,29 @@ export default function SelfDriveDetail() {
 
   const days = startDate && endDate ? Math.max(1, Math.ceil((new Date(endDate) - new Date(startDate)) / 86400000)) : 0
   const baseAmount = car ? days * car.pricePerDay : 0
-  const pointsDiscount = usePoints ? Math.min(user?.points || 0, baseAmount - discount) : 0
-  const premiumDiscount = user?.isPremium ? Math.floor((baseAmount - discount - pointsDiscount) * 0.05) : 0
-  const finalAmount = Math.max(0, baseAmount - discount - premiumDiscount - pointsDiscount)
+  const premiumDiscount = user?.isPremium ? Math.floor((baseAmount - discount) * 0.05) : 0
+  const pointsDiscount = usePoints ? Math.min(user?.points || 0, baseAmount - discount - premiumDiscount) : 0
+  const deliveryCharge = pickupMethod === 'delivery' ? 300 : 0
+  const securityDeposit = Number(car?.securityDeposit) || 0
+  const taxableAmount = Math.max(0, baseAmount - discount - premiumDiscount - pointsDiscount) + deliveryCharge
+  const gst = Math.round(taxableAmount * 0.18)
+  const finalAmount = Math.max(0, taxableAmount + gst + securityDeposit)
 
   const initMap = () => {
     if (!window.google) return
-    const input = document.getElementById('delivery-address-input')
-    if (input) {
+    const attach = (id, setter) => {
+      const input = document.getElementById(id)
+      if (!input) return
       const autocomplete = new window.google.maps.places.Autocomplete(input, {
-        componentRestrictions: { country: "in" }
+        componentRestrictions: { country: 'in' },
       })
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace()
-        setDeliveryAddress(place.formatted_address || place.name)
+        setter(place.formatted_address || place.name)
       })
     }
+    attach('pickup-location-input', setPickupLocation)
+    attach('drop-location-input', setDropLocation)
   }
 
   const useCurrentLocation = () => {
@@ -77,7 +126,7 @@ export default function SelfDriveDetail() {
         const geocoder = new window.google.maps.Geocoder()
         geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
           if (status === "OK" && results[0]) {
-            setDeliveryAddress(results[0].formatted_address)
+            setPickupLocation(results[0].formatted_address)
           }
         })
       })
@@ -105,17 +154,22 @@ export default function SelfDriveDetail() {
   const handleBook = async () => {
     if (!user) { openAuth('login'); return }
     if (!startDate || !endDate) { toast.error('Select dates'); return }
+    if (!pickupTime || !returnTime) { toast.error('Select pickup & return time'); return }
     if (!driverLicense || !ageVerified) { toast.error('Verification required'); return }
-    if (!deliveryAddress) { toast.error('Delivery address required'); return }
+    if (!panCardImage) { toast.error('Please upload your PAN card'); return }
+    if (!pickupLocation || !dropLocation) { toast.error('Select pickup & drop-off location'); return }
 
     setPaying(true)
     try {
       const order = await api('/bookings/create-order', {
         method: 'POST',
-        body: JSON.stringify({ 
-          carId: car.id, startDate, endDate, couponCode: appliedCoupon, 
+        body: JSON.stringify({
+          carId: car.id, startDate, endDate, couponCode: appliedCoupon,
           bookingType: 'self-drive', driverLicense, ageVerified, usePoints,
-          deliveryAddress
+          pickupTime, returnTime, pickupMethod,
+          pickupLocation, dropLocation,
+          deliveryAddress: pickupMethod === 'delivery' ? pickupLocation : null,
+          panCardImage,
         }),
       })
 
@@ -345,10 +399,51 @@ export default function SelfDriveDetail() {
                   </div>
                 </div>
 
-                {/* Delivery Address */}
+                {/* Times */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest ml-1 flex items-center gap-1.5"><Clock className="size-3 text-amber-500" /> Pickup Time</label>
+                    <input
+                      type="time" value={pickupTime} onChange={e => setPickupTime(e.target.value)}
+                      className="w-full h-14 bg-white border border-zinc-200 text-charcoal-900 rounded-2xl px-5 text-xs font-black focus:outline-none focus:border-brand-500 transition-all"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest ml-1 flex items-center gap-1.5"><Clock className="size-3 text-amber-500" /> Return Time</label>
+                    <input
+                      type="time" value={returnTime} onChange={e => setReturnTime(e.target.value)}
+                      className="w-full h-14 bg-white border border-zinc-200 text-charcoal-900 rounded-2xl px-5 text-xs font-black focus:outline-none focus:border-brand-500 transition-all"
+                    />
+                  </div>
+                </div>
+
+                {/* Pickup method */}
+                <div className="space-y-3">
+                  <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest ml-1">How do you want the car?</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button" onClick={() => setPickupMethod('self')}
+                      className={`h-16 rounded-2xl border text-left px-4 transition-all ${pickupMethod === 'self' ? 'border-brand-500 bg-amber-500/5 ring-1 ring-brand-500' : 'border-zinc-200 hover:border-zinc-300'}`}
+                    >
+                      <div className="text-[11px] font-black uppercase tracking-tight text-charcoal-900">Pick up from store</div>
+                      <div className="text-[9px] font-bold uppercase tracking-widest text-green-600">No extra charge</div>
+                    </button>
+                    <button
+                      type="button" onClick={() => setPickupMethod('delivery')}
+                      className={`h-16 rounded-2xl border text-left px-4 transition-all ${pickupMethod === 'delivery' ? 'border-brand-500 bg-amber-500/5 ring-1 ring-brand-500' : 'border-zinc-200 hover:border-zinc-300'}`}
+                    >
+                      <div className="text-[11px] font-black uppercase tracking-tight text-charcoal-900">Deliver to me</div>
+                      <div className="text-[9px] font-bold uppercase tracking-widest text-amber-600">+ ₹300 delivery</div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Pickup Location */}
                 <div className="space-y-3">
                   <div className="flex justify-between items-center ml-1">
-                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Delivery Address</label>
+                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">
+                      {pickupMethod === 'delivery' ? 'Pickup Location (delivery address)' : 'Pickup Location'}
+                    </label>
                     <button
                       onClick={useCurrentLocation}
                       className="text-[8px] font-black text-amber-500 uppercase tracking-widest hover:text-brand-600 transition-colors flex items-center gap-1"
@@ -359,9 +454,23 @@ export default function SelfDriveDetail() {
                   <div className="relative">
                     <MapPin className="size-4 absolute left-5 top-1/2 -translate-y-1/2 text-amber-500" />
                     <input
-                      id="delivery-address-input"
-                      value={deliveryAddress} onChange={e => setDeliveryAddress(e.target.value)}
-                      placeholder="Street, Area, City..."
+                      id="pickup-location-input"
+                      value={pickupLocation} onChange={e => setPickupLocation(e.target.value)}
+                      placeholder="Where you'll collect the car..."
+                      className="w-full h-14 bg-white border border-zinc-200 text-charcoal-900 rounded-2xl pl-12 pr-6 text-xs font-black focus:outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400"
+                    />
+                  </div>
+                </div>
+
+                {/* Drop-off Location */}
+                <div className="space-y-3">
+                  <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest ml-1">Drop-off Location</label>
+                  <div className="relative">
+                    <MapPin className="size-4 absolute left-5 top-1/2 -translate-y-1/2 text-green-600" />
+                    <input
+                      id="drop-location-input"
+                      value={dropLocation} onChange={e => setDropLocation(e.target.value)}
+                      placeholder="Where you'll return the car..."
                       className="w-full h-14 bg-white border border-zinc-200 text-charcoal-900 rounded-2xl pl-12 pr-6 text-xs font-black focus:outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400"
                     />
                   </div>
@@ -375,6 +484,26 @@ export default function SelfDriveDetail() {
                     placeholder="DL Number Required"
                     className="w-full h-14 bg-white border border-zinc-200 text-charcoal-900 rounded-2xl px-6 text-xs font-black focus:outline-none focus:border-brand-500 transition-all placeholder:text-zinc-400"
                   />
+                </div>
+
+                {/* PAN card upload */}
+                <div className="space-y-3">
+                  <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest ml-1">PAN Card</label>
+                  <label className={`relative flex h-14 cursor-pointer items-center gap-3 rounded-2xl border px-5 transition-all ${panCardImage ? 'border-green-400 bg-green-50' : 'border-zinc-200 hover:border-brand-500'}`}>
+                    {panCardImage ? (
+                      <>
+                        <img src={panCardImage} alt="PAN" className="size-9 rounded-lg object-cover" />
+                        <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-green-600">
+                          <CheckCircle2 className="size-3.5" /> Uploaded — tap to change
+                        </span>
+                      </>
+                    ) : (
+                      <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                        <CreditCard className="size-4 text-amber-500" /> {panUploading ? 'Uploading…' : 'Upload PAN Card Image'}
+                      </span>
+                    )}
+                    <input type="file" accept="image/*" onChange={handlePanUpload} disabled={panUploading} className="absolute inset-0 cursor-pointer opacity-0" />
+                  </label>
                 </div>
 
                 <label className="flex items-center gap-4 cursor-pointer group">
@@ -410,6 +539,25 @@ export default function SelfDriveDetail() {
                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-green-500">
                            <span>Reward Points Discount</span>
                            <span>-{fmtINR(pointsDiscount)}</span>
+                        </div>
+                      )}
+
+                      {deliveryCharge > 0 && (
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                          <span>Home Delivery</span>
+                          <span className="text-charcoal-900">{fmtINR(deliveryCharge)}</span>
+                        </div>
+                      )}
+
+                      <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                        <span>GST (18%)</span>
+                        <span className="text-charcoal-900">{fmtINR(gst)}</span>
+                      </div>
+
+                      {securityDeposit > 0 && (
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                          <span className="flex items-center gap-1.5"><ShieldCheck className="size-3 text-amber-500" /> Security Deposit (refundable)</span>
+                          <span className="text-charcoal-900">{fmtINR(securityDeposit)}</span>
                         </div>
                       )}
 
