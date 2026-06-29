@@ -43,8 +43,10 @@ export default function FleetPage() {
     return { brands, types, brandCounts }
   }, [cars])
 
+  const monthlyOf = (c) => Number(c.monthlyPrice) || Number(c.pricePerDay) || 0
+
   const maxPrice = useMemo(() => {
-    const m = Math.max(0, ...cars.map(c => Number(c.pricePerDay) || 0))
+    const m = Math.max(0, ...cars.map(monthlyOf))
     return m > 0 ? Math.ceil(m / 1000) * 1000 : 25000
   }, [cars])
 
@@ -55,7 +57,7 @@ export default function FleetPage() {
                          c.brand.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(c.brand)
     const matchesType = selectedTypes.length === 0 || selectedTypes.includes(c.type)
-    const matchesPrice = Number(c.pricePerDay) <= effectivePrice
+    const matchesPrice = monthlyOf(c) <= effectivePrice
     return matchesSearch && matchesBrand && matchesType && matchesPrice
   })
 
@@ -224,7 +226,7 @@ export default function FleetPage() {
                   </div>
                 </FilterAccordion>
 
-                <FilterAccordion title="Daily Budget" isOpen={openFilters.includes('price')} onToggle={() => toggleFilter('price')}>
+                <FilterAccordion title="Monthly Budget" isOpen={openFilters.includes('price')} onToggle={() => toggleFilter('price')}>
                   <div className="mt-6 px-1">
                     <input
                       type="range" min="1000" max={maxPrice} step="1000"
@@ -330,6 +332,7 @@ function FilterAccordion({ title, children, isOpen, onToggle }) {
 
 function FleetCard({ car }) {
   const id = car.id || car._id
+  const monthlyPrice = Number(car.monthlyPrice) || Number(car.pricePerDay) || 0
   const specs = [
     { icon: Fuel, label: car.fuel || 'Petrol' },
     { icon: Settings2, label: car.transmission === 'Automatic' ? 'Auto' : 'Manual' },
@@ -351,10 +354,6 @@ function FleetCard({ car }) {
         <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-charcoal-950/50 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-charcoal-950/40 to-transparent" />
 
-        {/* Chauffeur badge */}
-        <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-brand-500 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-lg shadow-brand-500/30">
-          <Shield className="size-2.5" /> Chauffeur Included
-        </div>
         {/* Type */}
         {car.type && (
           <div className="absolute right-4 top-4 rounded-full bg-charcoal-900/85 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white backdrop-blur-md">
@@ -364,8 +363,8 @@ function FleetCard({ car }) {
 
         {/* Floating price pill */}
         <div className="absolute bottom-4 right-4 flex items-baseline gap-1 rounded-2xl bg-white/95 px-4 py-2 shadow-lg backdrop-blur-md">
-          <span className="text-lg font-black tracking-tighter text-charcoal-900">₹{Number(car.pricePerDay).toLocaleString()}</span>
-          <span className="text-[9px] font-black uppercase tracking-widest text-zinc-400">/day</span>
+          <span className="text-lg font-black tracking-tighter text-charcoal-900">₹{monthlyPrice.toLocaleString()}</span>
+          <span className="text-[9px] font-black uppercase tracking-widest text-zinc-400">/month</span>
         </div>
       </div>
 

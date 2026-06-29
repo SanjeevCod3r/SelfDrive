@@ -17,7 +17,7 @@ export default function AdminPackages() {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
-    duration: '',
+    duration: 365, // billing period in days — defaults to Yearly
     features: ''
   })
 
@@ -52,7 +52,7 @@ export default function AdminPackages() {
       toast.success(editingPackage ? 'Package updated' : 'Package created')
       setShowModal(false)
       setEditingPackage(null)
-      setFormData({ name: '', price: '', duration: '', features: '' })
+      setFormData({ name: '', price: '', duration: 365, features: '' })
       fetchPackages()
     } catch (e) {
       toast.error(e.message)
@@ -69,6 +69,14 @@ export default function AdminPackages() {
     } catch (e) {
       toast.error(e.message)
     }
+  }
+
+  // Render the billing period from its day-count (365 = year, 30 = month)
+  const periodLabel = (days) => {
+    const d = Number(days)
+    if (d === 365) return 'year'
+    if (d === 30) return 'month'
+    return `${d} days`
   }
 
   const openEdit = (pkg) => {
@@ -93,7 +101,7 @@ export default function AdminPackages() {
           <p className="text-zinc-500 font-bold uppercase tracking-widest text-[10px]">Manage user membership plans</p>
         </div>
         <button
-          onClick={() => { setEditingPackage(null); setFormData({ name: '', price: '', duration: '', features: '' }); setShowModal(true); }}
+          onClick={() => { setEditingPackage(null); setFormData({ name: '', price: '', duration: 365, features: '' }); setShowModal(true); }}
           className="bg-brand-500 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center gap-2 hover:bg-brand-600 transition-all shadow-xl shadow-brand-500/20 active:scale-95"
         >
           <Plus className="size-4" /> Create Package
@@ -120,7 +128,7 @@ export default function AdminPackages() {
               <h3 className="text-2xl font-black text-charcoal-900 uppercase tracking-tight mb-2 group-hover:text-brand-500 transition-colors">{pkg.name}</h3>
               <div className="flex items-baseline gap-1">
                 <span className="text-4xl font-black text-charcoal-900">₹{pkg.price}</span>
-                <span className="text-xs font-bold text-zinc-500 uppercase">/ {pkg.duration} Days</span>
+                <span className="text-xs font-bold text-zinc-500 uppercase">/ {periodLabel(pkg.duration)}</span>
               </div>
             </div>
 
@@ -197,12 +205,14 @@ export default function AdminPackages() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Duration (Days)</label>
-                    <input
-                      type="number" required value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})}
-                      placeholder="30"
-                      className="w-full bg-white border border-zinc-200 h-16 rounded-2xl px-6 text-sm font-bold text-charcoal-900 placeholder:text-zinc-400 focus:border-brand-500 outline-none"
-                    />
+                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Billing Period</label>
+                    <select
+                      required value={Number(formData.duration) === 30 ? 30 : 365} onChange={e => setFormData({...formData, duration: Number(e.target.value)})}
+                      className="w-full bg-white border border-zinc-200 h-16 rounded-2xl px-6 text-sm font-bold text-charcoal-900 focus:border-brand-500 outline-none appearance-none"
+                    >
+                      <option value={365}>Yearly (365 days)</option>
+                      <option value={30}>Monthly (30 days)</option>
+                    </select>
                   </div>
                 </div>
 

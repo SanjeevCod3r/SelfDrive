@@ -11,6 +11,7 @@ export default function AdminSelfDriveCars() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(null) // car being edited, or null
   const [saving, setSaving] = useState(false)
+  const [serviceType, setServiceType] = useState('self-drive')
 
   useEffect(() => {
     fetchCars()
@@ -32,21 +33,27 @@ export default function AdminSelfDriveCars() {
 
   const startEdit = (car) => {
     setEditing(car)
+    setServiceType(car.serviceType || 'self-drive')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const cancelEdit = () => setEditing(null)
+  const cancelEdit = () => { setEditing(null); setServiceType('self-drive') }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const data = Object.fromEntries(formData)
+    const features = data.features
+      ? data.features.split(',').map(f => f.trim()).filter(Boolean)
+      : []
     const payload = {
       ...data,
       pricePerDay: parseInt(data.pricePerDay),
       seats: parseInt(data.seats),
       securityDeposit: data.securityDeposit ? parseInt(data.securityDeposit) : 0,
+      monthlyPrice: data.monthlyPrice ? parseInt(data.monthlyPrice) : 0,
       serviceType: data.serviceType || 'self-drive',
+      features,
     }
     setSaving(true)
     try {
@@ -57,6 +64,7 @@ export default function AdminSelfDriveCars() {
         await api('/admin/cars', { method: 'POST', body: JSON.stringify(payload) })
         toast.success('Car added')
         e.target.reset()
+        setServiceType('self-drive')
       }
       setEditing(null)
       fetchCars()
@@ -117,12 +125,18 @@ export default function AdminSelfDriveCars() {
               <input name="brand" defaultValue={editing?.brand} placeholder="Brand (e.g. Maruti)" required className={inputCls} />
               <div className="grid grid-cols-2 gap-4">
                 <input name="type" defaultValue={editing?.type} placeholder="Category (e.g. Hatchback)" required className={inputCls} />
-                <select name="serviceType" defaultValue={editing?.serviceType || 'self-drive'} required className={`${inputCls} appearance-none`}>
+                <select name="serviceType" value={serviceType} onChange={e => setServiceType(e.target.value)} required className={`${inputCls} appearance-none`}>
                   <option value="self-drive">Self-Drive Only</option>
                   <option value="both">Both Services</option>
                 </select>
               </div>
               <input name="pricePerDay" type="number" defaultValue={editing?.pricePerDay} placeholder="Price Per Day (₹)" required className={inputCls} />
+              {serviceType === 'both' && (
+                <div>
+                  <input name="monthlyPrice" type="number" min="0" defaultValue={editing?.monthlyPrice} placeholder="Monthly Price (₹) — shown on Fleet page" required className={inputCls} />
+                  <p className="text-[10px] text-zinc-400 font-medium mt-1 ml-1">Per-month price used for the With-Driver Fleet listing.</p>
+                </div>
+              )}
               <div>
                 <input name="securityDeposit" type="number" min="0" defaultValue={editing?.securityDeposit} placeholder="Security Deposit (₹) — optional" className={inputCls} />
                 <p className="text-[10px] text-zinc-400 font-medium mt-1 ml-1">Leave blank or 0 for no security deposit on this car.</p>
@@ -133,6 +147,7 @@ export default function AdminSelfDriveCars() {
               </div>
               <input name="fuel" defaultValue={editing?.fuel} placeholder="Fuel Type" required className={inputCls} />
               <input name="image" defaultValue={editing?.image} placeholder="Image URL" className={inputCls} />
+              <input name="features" defaultValue={Array.isArray(editing?.features) ? editing.features.join(', ') : editing?.features} placeholder="Features (comma-separated: GPS,AC,Bluetooth)" className={inputCls} />
               <Button type="submit" disabled={saving} className="w-full bg-brand-500 text-white font-black uppercase tracking-widest h-12 rounded-xl hover:bg-brand-600 disabled:opacity-50">
                 {saving ? 'Saving...' : editing ? 'Update Car' : 'Save Car'}
               </Button>

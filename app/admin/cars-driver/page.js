@@ -41,15 +41,11 @@ export default function AdminFleetCars() {
     e.preventDefault()
     const formData = new FormData(e.target)
     const data = Object.fromEntries(formData)
-    const features = data.features
-      ? data.features.split(',').map(f => f.trim()).filter(Boolean)
-      : []
     const payload = {
       ...data,
       pricePerDay: parseInt(data.pricePerDay),
       seats: parseInt(data.seats),
       serviceType: data.serviceType || 'with-driver',
-      features,
       available: true,
     }
     setSaving(true)
@@ -133,7 +129,6 @@ export default function AdminFleetCars() {
               <input name="location" defaultValue={editing?.location} placeholder="City (e.g. Mumbai)" required className={inputCls} />
               <input name="image" defaultValue={editing?.image} placeholder="Image URL" className={inputCls} />
               <input name="description" defaultValue={editing?.description} placeholder="Short description (optional)" className={inputCls} />
-              <input name="features" defaultValue={Array.isArray(editing?.features) ? editing.features.join(', ') : editing?.features} placeholder="Features (comma-separated: GPS,AC,Bluetooth)" className={inputCls} />
               <Button type="submit" disabled={saving} className="w-full bg-brand-500 text-white font-black uppercase tracking-widest h-12 rounded-xl hover:bg-brand-600 disabled:opacity-50">
                 {saving ? 'Saving...' : editing ? 'Update Car' : 'Save Car'}
               </Button>
