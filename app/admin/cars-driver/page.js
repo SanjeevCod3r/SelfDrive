@@ -41,11 +41,17 @@ export default function AdminFleetCars() {
     e.preventDefault()
     const formData = new FormData(e.target)
     const data = Object.fromEntries(formData)
+    const monthly = parseInt(data.monthlyPrice)
+    const svc = data.serviceType || 'with-driver'
     const payload = {
       ...data,
-      pricePerDay: parseInt(data.pricePerDay),
+      monthlyPrice: monthly,
+      // Fleet-only cars store the monthly rate in pricePerDay too (legacy +
+      // booking calc fallback). For "Both Services" cars the daily price is
+      // managed from the self-drive panel, so preserve it here.
+      pricePerDay: svc === 'both' ? (Number(editing?.pricePerDay) || 0) : monthly,
       seats: parseInt(data.seats),
-      serviceType: data.serviceType || 'with-driver',
+      serviceType: svc,
       available: true,
     }
     setSaving(true)
@@ -81,7 +87,7 @@ export default function AdminFleetCars() {
               <div className="flex-1">
                 <h4 className="text-charcoal-900 font-black uppercase">{car.brand} {car.name}</h4>
                 <div className="text-zinc-500 text-xs font-bold uppercase tracking-widest">
-                  {car.type} &middot; ₹{car.pricePerDay}/mo &middot; {car.serviceType}
+                  {car.type} &middot; ₹{car.monthlyPrice || car.pricePerDay}/mo &middot; {car.serviceType}
                 </div>
               </div>
               <div className="flex gap-2">
@@ -120,7 +126,7 @@ export default function AdminFleetCars() {
                   <option value="both">Both Services</option>
                 </select>
               </div>
-              <input name="pricePerDay" type="number" defaultValue={editing?.pricePerDay} placeholder="Monthly Price (₹)" required className={inputCls} />
+              <input name="monthlyPrice" type="number" defaultValue={editing?.monthlyPrice ?? editing?.pricePerDay} placeholder="Monthly Price (₹)" required className={inputCls} />
               <div className="grid grid-cols-2 gap-4">
                 <input name="seats" type="number" defaultValue={editing?.seats} placeholder="Seats" required className={inputCls} />
                 <input name="transmission" defaultValue={editing?.transmission} placeholder="Transmission" required className={inputCls} />
