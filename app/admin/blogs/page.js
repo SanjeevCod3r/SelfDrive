@@ -1,9 +1,9 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/components/AuthProvider'
-import { 
-  Plus, Zap, FileText, Calendar, 
-  User, ChevronRight, Trash2, 
+import {
+  Plus, Zap, FileText, Calendar,
+  User, ChevronRight, Trash2, Pencil, X,
   Image as ImageIcon, AlignLeft,
   LayoutGrid, List
 } from 'lucide-react'
@@ -15,6 +15,7 @@ export default function AdminBlogs() {
   const [blogs, setBlogs] = useState([])
   const [loading, setLoading] = useState(true)
   const [publishing, setPublishing] = useState(false)
+  const [editing, setEditing] = useState(null) // blog being edited, or null
 
   useEffect(() => {
     fetchBlogs()
@@ -31,19 +32,35 @@ export default function AdminBlogs() {
     }
   }
 
+  const startEdit = (blog) => {
+    setEditing(blog)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const cancelEdit = () => setEditing(null)
+
   const handlePublish = async (e) => {
     e.preventDefault()
     setPublishing(true)
     const formData = new FormData(e.target)
     const body = Object.fromEntries(formData)
-    
+
     try {
-      await api('/admin/blogs', {
-        method: 'POST',
-        body: JSON.stringify(body)
-      })
-      toast.success('Blog post published successfully')
-      e.target.reset()
+      if (editing) {
+        await api(`/admin/blogs/${editing.id}`, {
+          method: 'PUT',
+          body: JSON.stringify(body)
+        })
+        toast.success('Blog post updated')
+        setEditing(null)
+      } else {
+        await api('/admin/blogs', {
+          method: 'POST',
+          body: JSON.stringify(body)
+        })
+        toast.success('Blog post published successfully')
+        e.target.reset()
+      }
       fetchBlogs()
     } catch (e) {
       toast.error(e.message)
@@ -87,20 +104,27 @@ export default function AdminBlogs() {
             animate={{ opacity: 1, x: 0 }}
             className="bg-zinc-50 border border-zinc-200 rounded-[32px] p-8 sticky top-32 shadow-[0_4px_20px_-8px_rgba(21,22,27,0.10)]"
           >
-            <div className="flex items-center gap-4 mb-8">
-              <div className="size-12 rounded-2xl bg-brand-100 flex items-center justify-center border border-brand-200">
-                <Plus className="size-6 text-brand-500" />
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <div className="size-12 rounded-2xl bg-brand-100 flex items-center justify-center border border-brand-200">
+                  {editing ? <Pencil className="size-6 text-brand-500" /> : <Plus className="size-6 text-brand-500" />}
+                </div>
+                <h3 className="text-xl font-black text-charcoal-900 uppercase tracking-tight">{editing ? 'Edit Post' : 'Create Post'}</h3>
               </div>
-              <h3 className="text-xl font-black text-charcoal-900 uppercase tracking-tight">Create Post</h3>
+              {editing && (
+                <button onClick={cancelEdit} type="button" className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-red-500">
+                  <X className="size-3.5" /> Cancel
+                </button>
+              )}
             </div>
 
-            <form onSubmit={handlePublish} className="space-y-6">
+            <form key={editing?.id || 'new'} onSubmit={handlePublish} className="space-y-6">
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Article Title</label>
                 <div className="relative">
                   <FileText className="size-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
                   <input
-                    name="title" required placeholder="Catchy title for your blog..."
+                    name="title" required defaultValue={editing?.title} placeholder="Catchy title for your blog..."
                     className="w-full pl-11 pr-4 h-14 bg-white border border-zinc-200 rounded-2xl text-charcoal-900 placeholder:text-zinc-400 focus:outline-none focus:border-brand-500 transition-all font-medium"
                   />
                 </div>
@@ -112,7 +136,7 @@ export default function AdminBlogs() {
                   <div className="relative">
                     <LayoutGrid className="size-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
                     <input
-                      name="category" required placeholder="e.g. Travel"
+                      name="category" required defaultValue={editing?.category} placeholder="e.g. Travel"
                       className="w-full pl-11 pr-4 h-14 bg-white border border-zinc-200 rounded-2xl text-charcoal-900 placeholder:text-zinc-400 focus:outline-none focus:border-brand-500 transition-all text-xs font-bold"
                     />
                   </div>
@@ -122,7 +146,7 @@ export default function AdminBlogs() {
                   <div className="relative">
                     <ImageIcon className="size-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
                     <input
-                      name="coverImage" placeholder="URL"
+                      name="coverImage" defaultValue={editing?.coverImage} placeholder="URL"
                       className="w-full pl-11 pr-4 h-14 bg-white border border-zinc-200 rounded-2xl text-charcoal-900 placeholder:text-zinc-400 focus:outline-none focus:border-brand-500 transition-all text-xs font-bold"
                     />
                   </div>
@@ -134,7 +158,7 @@ export default function AdminBlogs() {
                 <div className="relative">
                   <AlignLeft className="size-4 absolute left-4 top-6 text-zinc-400" />
                   <textarea
-                    name="content" required placeholder="Write your story here..."
+                    name="content" required defaultValue={editing?.content} placeholder="Write your story here..."
                     className="w-full pl-11 pr-4 pt-5 h-60 bg-white border border-zinc-200 rounded-2xl text-charcoal-900 placeholder:text-zinc-400 focus:outline-none focus:border-brand-500 transition-all font-medium resize-none leading-relaxed"
                   />
                 </div>
@@ -144,7 +168,7 @@ export default function AdminBlogs() {
                 type="submit" disabled={publishing}
                 className="w-full h-16 bg-brand-500 hover:bg-brand-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-brand-500/10 active:scale-95 disabled:opacity-50"
               >
-                {publishing ? 'Publishing...' : 'Publish Article'}
+                {publishing ? 'Saving...' : editing ? 'Update Article' : 'Publish Article'}
               </button>
             </form>
           </motion.div>
@@ -166,7 +190,7 @@ export default function AdminBlogs() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="group bg-zinc-50 border border-zinc-200 rounded-[32px] p-6 hover:border-brand-500/40 hover:shadow-[0_4px_20px_-8px_rgba(21,22,27,0.10)] transition-all duration-500 flex gap-6"
+                    className={`group bg-zinc-50 border rounded-[32px] p-6 hover:shadow-[0_4px_20px_-8px_rgba(21,22,27,0.10)] transition-all duration-500 flex gap-6 ${editing?.id === b.id ? 'border-brand-500 ring-2 ring-brand-500/20' : 'border-zinc-200 hover:border-brand-500/40'}`}
                   >
                     <div className="size-32 shrink-0 rounded-2xl overflow-hidden border border-zinc-200 bg-white">
                       <img src={b.coverImage || 'https://images.unsplash.com/photo-1542362567-b054cd1321c1'} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -177,12 +201,20 @@ export default function AdminBlogs() {
                         <span className="text-[9px] font-black text-brand-700 uppercase tracking-widest px-2 py-1 bg-brand-100 rounded-md">
                           {b.category || 'General'}
                         </span>
-                        <button
-                          onClick={() => deleteBlog(b.id)}
-                          className="size-8 rounded-lg flex items-center justify-center text-zinc-500 hover:bg-red-50 hover:text-red-500 transition-all"
-                        >
-                          <Trash2 className="size-4" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => startEdit(b)}
+                            className="size-8 rounded-lg flex items-center justify-center text-zinc-500 hover:bg-brand-500/10 hover:text-brand-500 transition-all"
+                          >
+                            <Pencil className="size-4" />
+                          </button>
+                          <button
+                            onClick={() => deleteBlog(b.id)}
+                            className="size-8 rounded-lg flex items-center justify-center text-zinc-500 hover:bg-red-50 hover:text-red-500 transition-all"
+                          >
+                            <Trash2 className="size-4" />
+                          </button>
+                        </div>
                       </div>
                       <h4 className="text-xl font-black text-charcoal-900 uppercase tracking-tight mb-3 line-clamp-1 group-hover:text-brand-500 transition-colors">
                         {b.title}

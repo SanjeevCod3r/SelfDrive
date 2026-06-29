@@ -7,6 +7,10 @@ export const metadata = {
   description: 'Read the latest road trip guides, travel tips, and updates from Kashi Ka.'
 }
 
+// Always read the latest posts from the DB at request time so blogs published
+// from the admin panel show up immediately (otherwise this page is cached at build).
+export const dynamic = 'force-dynamic'
+
 export default async function BlogList() {
   const db = await getDb()
   const posts = await db.collection('blogs').find({}).sort({ createdAt: -1 }).toArray()

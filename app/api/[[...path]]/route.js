@@ -807,6 +807,26 @@ async function handleRoute(req, method, segments) {
     return ok({ blog: safe })
   }
 
+  if (segments[0] === 'admin' && segments[1] === 'blogs' && segments.length === 3 && method === 'PUT') {
+    const admin = await requireAdmin(req)
+    if (!admin) return err('Forbidden', 403)
+    const body = await req.json()
+    const content = body.content || ''
+    const update = {
+      title: body.title,
+      category: body.category || 'General',
+      content,
+      coverImage: body.coverImage || '',
+      excerpt: body.excerpt || content.slice(0, 150) + '...',
+      updatedAt: new Date(),
+    }
+    const result = await db.collection('blogs').updateOne({ id: segments[2] }, { $set: update })
+    if (!result.matchedCount) return err('Blog not found', 404)
+    const blog = await db.collection('blogs').findOne({ id: segments[2] })
+    const { _id, ...safe } = blog
+    return ok({ blog: safe })
+  }
+
   if (segments[0] === 'admin' && segments[1] === 'blogs' && segments.length === 3 && method === 'DELETE') {
     const admin = await requireAdmin(req)
     if (!admin) return err('Forbidden', 403)

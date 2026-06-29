@@ -2,6 +2,9 @@ import { ArrowLeft, Calendar, User, Share2, ChevronLeft, Clock, ArrowRight, Spar
 import Link from 'next/link'
 import { getDb } from '@/lib/mongo'
 
+// Render on each request so newly published / edited posts are reachable.
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }) {
   const db = await getDb()
   const post = await db.collection('blogs').findOne({ slug: params.slug })
